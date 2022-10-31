@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+    <a class="navbar-brand" href="/">
+        <img src="/images/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
+        ACROBATUM
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/">Главная</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/employee">Сотрудники</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/client">Клиенты</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="/provider">Поставщики <span class="sr-only">(current)</span></a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<body>
+
+<search class="container d-flex flex-column align-items-center mt-3">
+    <p><h4 class="display-8 p-3">Поставщики</h4></p>
+    <form method="get" th:action="@{/provider}"
+          class="form-horizontal form-group d-flex flex-row align-items-center justify-content-center col-sm-6">
+        <input placeholder="Наименование организации" class="form-control search mr-3" name="sOrgName">
+        <input value="Поиск" type="submit" class="btn btn-info">
+    </form>
+    <form method="get" th:action="@{/provider/add}"
+          class="form-group">
+        <input type="submit" value="Добавить поставщика" class="btn btn-success">
+    </form>
+</search>
+
+<div class="d-flex flex-column align-items-center justify-content-center mt-3">
+    <div class="col-sm-12">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th scope="col" class="text-center">Наименование организации</th>
+                <th scope="col" class="text-center">Телефон</th>
+                <th scope="col" class="text-center">Email</th>
+                <th scope="col" class="text-center">Адрес</th>
+                <th scope="col" class="text-center">Действие</th>
+            </tr>
+            </thead>
+            <tr th:each="provider : ${providers}">
+                <form>
+                    <td scope="col" class="text-center"><span class="lead fs-7 d-inline"
+                                                              th:text="${provider.orgName}"></span></td>
+                    <td scope="col" class="text-center">
+                        <span class="lead fs-7 d-inline"
+                              th:text="${provider.contacts != null} ? ${provider.contacts.phoneNumber} : 'Не указано'"></span>
+                    </td>
+                    <td scope="col" class="text-center"><span
+                            class="lead fs-7 d-inline"
+                            th:text="${provider.contacts != null} ? ${provider.contacts.email} : 'Не указано'"></span>
+                    </td>
+                    <td scope="col" class="text-center"><span
+                            class="lead fs-7 d-inline"
+                            th:text="${provider.contacts != null} ? ${provider.contacts.address} : 'Не указано'"></span>
+                    </td>
+                    <td scope="col" class="text-center">
+                        <input type="submit" value="Редактировать"
+                               th:formaction="@{/provider/edit}" formmethod="get"
+                               class="btn btn-outline-warning mr-2">
+                        <input type="submit" value="Удалить" class="btn btn-outline-danger"
+                               th:formaction="@{/provider/delete}" formmethod="post">
+                    </td>
+                    <input type="hidden" name="provider_id" th:value="${provider.id}">
+                </form>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+</html>
