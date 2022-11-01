@@ -14,4 +14,20 @@ public class Gender {
 
     @OneToMany(mappedBy = "gender", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Characteristics> characteristics;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
 }

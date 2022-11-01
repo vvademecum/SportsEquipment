@@ -28,9 +28,9 @@ public class ClientController {
                              @RequestParam(required = false) String sSurname,
                              @RequestParam(required = false) String sPatronymic, Model model) {
         if (sName != "" || sSurname != "" || sPatronymic != "") {
-            sSurname = sSurname == "" ? "_" : sSurname;
-            sName = sName == "" ? "_" : sName;
-            sPatronymic = sPatronymic == "" ? "_" : sPatronymic;
+            sSurname = sSurname == "" ? "---" : sSurname;
+            sName = sName == "" ? "---" : sName;
+            sPatronymic = sPatronymic == "" ? "---" : sPatronymic;
             model.addAttribute("clients", clientRepository.findByNameContainsOrSurnameContainsOrPatronymicContains(sName, sSurname, sPatronymic));
             model.addAttribute("contacts", contactsRepository.findAll());
 

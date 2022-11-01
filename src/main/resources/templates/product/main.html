@@ -23,14 +23,14 @@
             <li class="nav-item">
                 <a class="nav-link" href="/employee">Сотрудники</a>
             </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="/client">Клиенты <span class="sr-only">(current)</span></a>
+            <li class="nav-item">
+                <a class="nav-link" href="/client">Клиенты</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/provider">Поставщики</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/product">Товар</a>
+            <li class="nav-item active">
+                <a class="nav-link" href="/product">Товар <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/basket">Заказы</a>
@@ -40,73 +40,66 @@
 </nav>
 <body>
 
-
 <search class="container d-flex flex-column align-items-center mt-3">
-    <p><h4 class="display-8 p-3">Клиенты</h4></p>
-    <form method="get" th:action="@{/client}"
+    <p><h4 class="display-8 p-3">Товары</h4></p>
+    <form method="get" th:action="@{/product}"
           class="form-horizontal form-group d-flex flex-row align-items-center justify-content-center col-sm-6">
-        <input placeholder="Фамилия" class="form-control search mr-3" name="sSurname">
-        <input placeholder="Имя" class="form-control search mr-3" name="sName">
-        <input placeholder="Отчество" class="form-control search mr-3" name="sPatronymic">
+        <input placeholder="Наименование товара" class="form-control search mr-3" name="sName">
         <input value="Поиск" type="submit" class="btn btn-info">
     </form>
-    <form method="get" th:action="@{/client/add}"
+    <form method="get" th:action="@{/product/add}"
           class="form-group">
-        <input type="submit" value="Добавить клиента" class="btn btn-success">
+        <input type="submit" value="Добавить товар" class="btn btn-success">
     </form>
 </search>
-
 
 <div class="d-flex flex-column align-items-center justify-content-center mt-3">
     <div class="col-sm-12">
         <table class="table table-bordered">
             <thead>
             <tr>
-                <th scope="col" class="text-center">Логин</th>
-                <th scope="col" class="text-center">Фамилия</th>
-                <th scope="col" class="text-center">Имя</th>
-                <th scope="col" class="text-center">Отчество</th>
-                <th scope="col" class="text-center">Телефон</th>
-                <th scope="col" class="text-center">Email</th>
-                <th scope="col" class="text-center">Адрес</th>
-                <th scope="col" class="text-center">Действие</th>
+                <th scope="col" class="text-center">Наименование</th>
+                <th scope="col" class="text-center">Категория</th>
+                <th scope="col" class="text-center">Кол-во на складе</th>
+                <th scope="col" class="text-center">Стоимость</th>
+                <th scope="col" class="text-center">Поставщик</th>
+                <th scope="col" class="text-center">Действия</th>
+
+                <!--        <th scope="col" class="text-center">Описание</th>-->
+                <!--        <th scope="col" class="text-center">Срок гарантии</th>-->
+                <!--        <th scope="col" class="text-center">Вид спорта</th>-->
+                <!--        <th scope="col" class="text-center">Сезон</th>-->
+                <!--        <th scope="col" class="text-center">Пол</th>-->
+                <!--        <th scope="col" class="text-center">Страна производства</th>-->
+
             </tr>
             </thead>
-            <tr th:each="client : ${clients}">
+            <tr th:each="product : ${products}">
                 <form>
                     <td scope="col" class="text-center"><span class="lead fs-7 d-inline"
-                                                              th:text="${client.login}"></span></td>
+                                                              th:text="${product.name}"></span></td>
                     <td scope="col" class="text-center"><span class="lead fs-7 d-inline"
-                                                              th:text="${client.surname}"></span></td>
+                                                              th:text="${product.category}"></span></td>
                     <td scope="col" class="text-center"><span class="lead fs-7 d-inline"
-                                                              th:text="${client.name}"></span></td>
+                                                              th:text="${product.quantityInStock}"></span></td>
                     <td scope="col" class="text-center"><span class="lead fs-7 d-inline"
-                                                              th:text="${client.patronymic}"></span></td>
-                    <td scope="col" class="text-center">
-                        <span class="lead fs-7 d-inline"
-                              th:text="${client.contacts != null} ? ${client.contacts.phoneNumber} : 'Не указано'"></span>
-                    </td>
-                    <td scope="col" class="text-center"><span
-                            class="lead fs-7 d-inline"
-                            th:text="${client.contacts != null} ? ${client.contacts.email} : 'Не указано'"></span></td>
-                    <td scope="col" class="text-center"><span
-                            class="lead fs-7 d-inline"
-                            th:text="${client.contacts != null} ? ${client.contacts.address} : 'Не указано'"></span>
-                    </td>
+                                                              th:text="${product.cost}"></span></td>
+                    <td scope="col" class="text-center"><span class="lead fs-7 d-inline"
+                                                              th:text="${product.provider.orgName}"></span></td>
+
                     <td scope="col" class="text-center">
                         <input type="submit" value="Редактировать"
-                               th:formaction="@{/client/edit}" formmethod="get"
+                               th:formaction="@{/product/edit}" formmethod="get"
                                class="btn btn-outline-warning mr-2">
                         <input type="submit" value="Удалить" class="btn btn-outline-danger"
-                               th:formaction="@{/client/delete}" formmethod="post">
+                               th:formaction="@{/product/delete}" formmethod="post">
                     </td>
-                    <input type="hidden" name="client_id" th:value="${client.id}">
+                    <input type="hidden" name="product_id" th:value="${product.id}">
                 </form>
             </tr>
         </table>
     </div>
 </div>
-
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"

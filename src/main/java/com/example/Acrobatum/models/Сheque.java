@@ -7,7 +7,7 @@ import java.util.List;
 @Entity
 public class Сheque {
 
-    public Сheque(Date dateOfPurchase, Client client, Employee employee) {
+    public Сheque(String dateOfPurchase, Client client, Employee employee) {
         this.dateOfPurchase = dateOfPurchase;
         this.client = client;
         this.employee = employee;
@@ -21,8 +21,7 @@ public class Сheque {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date dateOfPurchase;
+    private String dateOfPurchase;
 
     @ManyToOne
     @JoinColumn(name = "employee_id", referencedColumnName = "id")
@@ -32,14 +31,30 @@ public class Сheque {
     @JoinColumn(name = "client_id", referencedColumnName = "id")
     private Client client;
 
-    @OneToMany(mappedBy = "cheque", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "cheque", cascade = CascadeType.REMOVE)
     private List<Product_Cheque> product_chequeList;
 
-    public Date getDateOfPurchase() {
+    public List<Product_Cheque> getProduct_chequeList() {
+        return product_chequeList;
+    }
+
+    public void setProduct_chequeList(List<Product_Cheque> product_chequeList) {
+        this.product_chequeList = product_chequeList;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getDateOfPurchase() {
         return dateOfPurchase;
     }
 
-    public void setDateOfPurchase(Date dateOfPurchase) {
+    public void setDateOfPurchase(String dateOfPurchase) {
         this.dateOfPurchase = dateOfPurchase;
     }
 

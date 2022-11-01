@@ -23,8 +23,8 @@
             <li class="nav-item">
                 <a class="nav-link" href="/employee">Сотрудники</a>
             </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="/client">Клиенты <span class="sr-only">(current)</span></a>
+            <li class="nav-item">
+                <a class="nav-link" href="/client">Клиенты</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/provider">Поставщики</a>
@@ -32,75 +32,61 @@
             <li class="nav-item">
                 <a class="nav-link" href="/product">Товар</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/basket">Заказы</a>
+            <li class="nav-item active">
+                <a class="nav-link" href="/basket">Заказы <span class="sr-only">(current)</span></a>
             </li>
         </ul>
     </div>
 </nav>
 <body>
 
-
 <search class="container d-flex flex-column align-items-center mt-3">
-    <p><h4 class="display-8 p-3">Клиенты</h4></p>
-    <form method="get" th:action="@{/client}"
+    <p><h4 class="display-8 p-3">Заказы</h4></p>
+    <form method="get" th:action="@{/basket}"
           class="form-horizontal form-group d-flex flex-row align-items-center justify-content-center col-sm-6">
-        <input placeholder="Фамилия" class="form-control search mr-3" name="sSurname">
-        <input placeholder="Имя" class="form-control search mr-3" name="sName">
-        <input placeholder="Отчество" class="form-control search mr-3" name="sPatronymic">
+        <input type="date" placeholder="Дата заказа" class="form-control search mr-3" name="sDate">
         <input value="Поиск" type="submit" class="btn btn-info">
     </form>
-    <form method="get" th:action="@{/client/add}"
+    <form method="get" th:action="@{/basket/add}"
           class="form-group">
-        <input type="submit" value="Добавить клиента" class="btn btn-success">
+        <input type="submit" value="Добавить заказ" class="btn btn-success">
     </form>
 </search>
-
 
 <div class="d-flex flex-column align-items-center justify-content-center mt-3">
     <div class="col-sm-12">
         <table class="table table-bordered">
             <thead>
             <tr>
-                <th scope="col" class="text-center">Логин</th>
-                <th scope="col" class="text-center">Фамилия</th>
-                <th scope="col" class="text-center">Имя</th>
-                <th scope="col" class="text-center">Отчество</th>
-                <th scope="col" class="text-center">Телефон</th>
-                <th scope="col" class="text-center">Email</th>
-                <th scope="col" class="text-center">Адрес</th>
-                <th scope="col" class="text-center">Действие</th>
+                <th scope="col" class="text-center">Дата заказа</th>
+                <th scope="col" class="text-center">ФИО клиента</th>
+                <th scope="col" class="text-center">ФИО кассира</th>
+                <th scope="col" class="text-center">Товары</th>
+                <th scope="col" class="text-center">Действия</th>
             </tr>
             </thead>
-            <tr th:each="client : ${clients}">
+            <tr th:each="basket : ${baskets}">
                 <form>
                     <td scope="col" class="text-center"><span class="lead fs-7 d-inline"
-                                                              th:text="${client.login}"></span></td>
+                                                              th:text="${basket.dateOfPurchase}"></span></td>
                     <td scope="col" class="text-center"><span class="lead fs-7 d-inline"
-                                                              th:text="${client.surname}"></span></td>
+                                                              th:text="${basket.client.surname} + ' ' + ${#strings.substring(basket.client.name, 0, 1)} + '. ' + ${#strings.substring(basket.client.patronymic, 0, 1)} + '. '"></span></td>
                     <td scope="col" class="text-center"><span class="lead fs-7 d-inline"
-                                                              th:text="${client.name}"></span></td>
-                    <td scope="col" class="text-center"><span class="lead fs-7 d-inline"
-                                                              th:text="${client.patronymic}"></span></td>
+                                                              th:text="${basket.employee.surname} + ' ' + ${#strings.substring(basket.employee.name, 0, 1)} + '. ' + ${#strings.substring(basket.employee.patronymic, 0, 1)} + '. '"></span></td>
                     <td scope="col" class="text-center">
-                        <span class="lead fs-7 d-inline"
-                              th:text="${client.contacts != null} ? ${client.contacts.phoneNumber} : 'Не указано'"></span>
-                    </td>
-                    <td scope="col" class="text-center"><span
-                            class="lead fs-7 d-inline"
-                            th:text="${client.contacts != null} ? ${client.contacts.email} : 'Не указано'"></span></td>
-                    <td scope="col" class="text-center"><span
-                            class="lead fs-7 d-inline"
-                            th:text="${client.contacts != null} ? ${client.contacts.address} : 'Не указано'"></span>
+                        <label class="lead fs-7" th:each="position : ${positions}">
+                            <span class="lead fs-7 d-inline p-2" th:if="${position.cheque.id == basket.id}" th:text="${position.product.name} + ' x' + ${position.quantity}"></span>
+                            <span class="lead fs-7 d-inline" th:if="${position.cheque.id == basket.id}">|</span>
+                        </label>
                     </td>
                     <td scope="col" class="text-center">
                         <input type="submit" value="Редактировать"
-                               th:formaction="@{/client/edit}" formmethod="get"
+                               th:formaction="@{/basket/edit}" formmethod="get"
                                class="btn btn-outline-warning mr-2">
                         <input type="submit" value="Удалить" class="btn btn-outline-danger"
-                               th:formaction="@{/client/delete}" formmethod="post">
+                               th:formaction="@{/basket/delete}" formmethod="post">
                     </td>
-                    <input type="hidden" name="client_id" th:value="${client.id}">
+                    <input type="hidden" name="basket_id" th:value="${basket.id}">
                 </form>
             </tr>
         </table>

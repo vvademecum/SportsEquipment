@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+    <a class="navbar-brand" href="/">
+        <img src="/images/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
+        ACROBATUM
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/">Главная</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/employee">Сотрудники</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/client">Клиенты</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/provider">Поставщики</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/product">Товар</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/basket">Заказы</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<body>
+
+<content class="container d-flex flex-column align-items-right mt-4">
+    <form th:object="${product}" method="post" th:action="@{/product/add}">
+        <div class="form-group">
+            <label class="mt-4 font-weight-bold" for="name">Наименование товара:</label>
+            <input type="text" th:field="*{name}" class="form-control" id="name"
+                   placeholder="Наименование товара"/>
+            <span class="error text-danger" th:if="${message != null}" th:text="${message}"></span>
+            <span class="error text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+        </div>
+        <div class="form-group">
+            <label class="mt-4 font-weight-bold" for="description">Описание:</label>
+            <textarea type="text" th:field="*{description}" class="form-control" id="description"
+                      placeholder="Описание"></textarea>
+            <span class="error text-danger" th:if="${#fields.hasErrors('description')}"
+                  th:errors="*{description}"></span>
+        </div>
+        <div class="form-group">
+            <label class="mt-4 font-weight-bold" for="quantityInStock">Количество на складе:</label>
+            <input type="number" th:field="*{quantityInStock}" class="form-control" id="quantityInStock"
+                   placeholder="Количество на складе"/>
+            <span class="error text-danger" th:if="${#fields.hasErrors('quantityInStock')}"
+                  th:errors="*{quantityInStock}"></span>
+        </div>
+        <div class="form-group">
+            <label class="mt-4 font-weight-bold" for="category">Категория:</label>
+            <input type="text" th:field="*{category}" class="form-control" id="category"
+                   placeholder="Категория"/>
+            <span class="error text-danger" th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></span>
+        </div>
+        <div class="form-group">
+            <label class="mt-4 font-weight-bold" for="cost">Цена:</label>
+            <input type="number" th:field="*{cost}" class="form-control" id="cost"
+                   placeholder="Цена"/>
+            <span class="error text-danger" th:if="${#fields.hasErrors('cost')}" th:errors="*{cost}"></span>
+        </div>
+
+
+        <div class="form-group">
+            <label class="mt-4 font-weight-bold" for="provider">Поставщик:</label>
+            <select name="provider_id" class="form-control mb-2" id="provider" th:field="*{provider}">
+                <option th:each="provider : ${providers}" th:value="${provider.id}"
+                        th:text="${provider.orgName}"></option>
+            </select>
+            <span class="error text-danger" th:if="${#fields.hasErrors('provider')}" th:errors="*{provider}"></span>
+        </div>
+
+
+        <div th:object="${characteristics}">
+            <div class="form-group">
+                <label class="mt-4 font-weight-bold" for="guaranteePeriod">Срок гарантии:</label>
+                <input type="text" th:field="*{guaranteePeriod}" class="form-control" id="guaranteePeriod"
+                       placeholder="Срок гарантии"/>
+            </div>
+            <div class="form-group">
+                <label class="mt-4 font-weight-bold" for="kindOfSport">Вид спорта:</label>
+                <select name="kindOfSport_id" class="form-control mb-2" id="kindOfSport" th:field="*{kindOfSport}">
+                    <option th:each="kindOfSport : ${kindsOfSport}" th:value="${kindOfSport.id}"
+                            th:text="${kindOfSport.kindOfSport}"></option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="mt-4 font-weight-bold" for="season">Сезон:</label>
+                <select name="season_id" class="form-control mb-2" id="season" th:field="*{season}">
+                    <option th:each="season : ${seasons}" th:value="${season.id}"
+                            th:text="${season.season}"></option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="mt-4 font-weight-bold" for="gender">Пол:</label>
+                <select name="gender_id" class="form-control mb-2" id="gender" th:field="*{gender}">
+                    <option th:each="gender : ${genders}" th:value="${gender.id}"
+                            th:text="${gender.gender}"></option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="mt-4 font-weight-bold" for="country">Страна производства:</label>
+                <select name="country_id" class="form-control mb-2" id="country" th:field="*{country}">
+                    <option th:each="country : ${countries}" th:value="${country.id}"
+                            th:text="${country.country}"></option>
+                </select>
+            </div>
+        </div>
+
+        <p><input class="btn btn-primary" type="submit" value="Добавить продукт"></p>
+    </form>
+</content>
+
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+</html>

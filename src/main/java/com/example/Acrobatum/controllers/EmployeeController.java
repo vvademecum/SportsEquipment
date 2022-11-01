@@ -28,9 +28,9 @@ public class EmployeeController {
                                @RequestParam(required = false) String sSurname,
                                @RequestParam(required = false) String sPatronymic, Model model) {
         if (sName != "" || sSurname != "" || sPatronymic != "") {
-            sSurname = sSurname == "" ? "_" : sSurname;
-            sName = sName == "" ? "_" : sName;
-            sPatronymic = sPatronymic == "" ? "_" : sPatronymic;
+            sSurname = sSurname == "" ? "---" : sSurname;
+            sName = sName == "" ? "---" : sName;
+            sPatronymic = sPatronymic == "" ? "---" : sPatronymic;
             model.addAttribute("employees", employeeRepository.findByNameContainsOrSurnameContainsOrPatronymicContains(sName, sSurname, sPatronymic));
         } else {
             model.addAttribute("employees", employeeRepository.findAll());
@@ -110,6 +110,7 @@ public class EmployeeController {
         if (bindingResult.hasErrors()) {
             return "employee/edit";
         }
+
         if (new_password != null && new_password != "") {
             dbEmployee.setPassword(new BCryptPasswordEncoder().encode(new_password));
         }

@@ -27,8 +27,6 @@ public class UserService implements UserDetailsService {
         Client client = clientRepository.findByLogin(username);
         Employee employee = employeeRepository.findByLogin(username);
 
-//        System.out.println(login);
-
         if(client != null) {
             role = "USER";
             userDetails = User.builder()

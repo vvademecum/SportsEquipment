@@ -25,6 +25,18 @@ public class MainController {
             case "ROLE_USER":
                 response.sendRedirect(request.getContextPath() + "/");
                 break;
+            case "ROLE_ADMIN":
+                response.sendRedirect(request.getContextPath() + "/");
+                break;
+            case "ROLE_CASHIER":
+                response.sendRedirect(request.getContextPath() + "/");
+                break;
+            case "ROLE_HR":
+                response.sendRedirect(request.getContextPath() + "/");
+                break;
+            case "ROLE_STOREKEEPER":
+                response.sendRedirect(request.getContextPath() + "/");
+                break;
             default:
                 response.sendRedirect(request.getContextPath() + "/logIn");
         }

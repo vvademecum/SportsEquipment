@@ -18,9 +18,18 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
-        http.csrf().disable()
-                .formLogin().loginPage("/logIn")
+        http
+                .csrf().disable()
+                .authorizeRequests()
+                .antMatchers( "/registration").permitAll()
+                .antMatchers("/images/**").permitAll()
+                .antMatchers("/client/**").hasAnyRole("ADMIN", "CASHIER")
+                .antMatchers("/employee/**").hasAnyRole("ADMIN", "HR")
+                .antMatchers("/product/**").hasAnyRole("ADMIN", "STOREKEEPER")
+                .antMatchers("/provider/**").hasAnyRole("ADMIN", "STOREKEEPER")
+              //  .anyRequest().authenticated().and()
+                .and().formLogin()
+                .loginPage("/logIn")
                 .defaultSuccessUrl("/success", true);
 
         return http.build();
