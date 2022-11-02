@@ -39,34 +39,56 @@ public class ProviderController {
 
     @GetMapping("/add")
     public String providerAddPage(@ModelAttribute("provider")
-                                @Valid Provider provider,
-                                BindingResult bindingResult,
-                                Model model) {
+                                  @Valid Provider provider,
+                                  BindingResult bindingResult,
+                                  Model model) {
 
         model.addAttribute("provider", new Provider());
         model.addAttribute("contacts", new Contacts());
         return "provider/add";
     }
 
+    public static Boolean contactsIsntCorrect(Contacts contacts, Boolean hasContacts) {
+        if (hasContacts == null ? false : hasContacts) {
+            return (contacts.getAddress().isEmpty() ||
+                    contacts.getAddress().length() < 5 ||
+                    contacts.getAddress().length() > 200 ||
+                    contacts.getEmail().isEmpty() ||
+                    contacts.getEmail().length() < 5 ||
+                    contacts.getEmail().length() > 100 ||
+                    contacts.getPhoneNumber().isEmpty() ||
+                    !contacts.getPhoneNumber().matches("^\\+7[0-9]{10}$"));
+        }
+        else
+            return false;
+    }
+
     @PostMapping("/add")
     public String createProvider(@ModelAttribute("provider")
-                               @Valid Provider provider,
-                               BindingResult bindingResult,
-                               Contacts contacts,
-                               @RequestParam(required = false) Boolean hasContacts,
-                               Model model) {
+                                 @Valid Provider provider,
+                                 BindingResult bindingResult,
+                                 @Valid Contacts contacts,
+                                 BindingResult bindingResult2,
+                                 @RequestParam(required = false) Boolean hasContacts,
+                                 Model model) {
 
         Provider dbProvider = providerRepository.findByOrgName(provider.getOrgName());
         if (dbProvider != null) {
-            model.addAttribute("provider", new Provider());
-            model.addAttribute("contacts", new Contacts());
+            model.addAttribute("provider", provider);
+            model.addAttribute("contacts", contacts);
             model.addAttribute("message", "Такая организация уже существует");
             return "provider/add";
         }
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("provider", provider);
+            model.addAttribute("contacts", contacts);
             return "provider/add";
+        }
+        if(hasContacts == null ? false : hasContacts && bindingResult2.hasErrors()){
+            model.addAttribute("provider", provider);
+            model.addAttribute("contacts", contacts);
+            return "provider/edit";
         }
 
         dbProvider = new Provider(provider.getOrgName());
@@ -108,18 +130,28 @@ public class ProviderController {
 
     @PostMapping("/edit")
     public String providerEdit(@ModelAttribute("provider")
-                             @Valid Provider provider,
-                             BindingResult bindingResult,
-                             Contacts contacts,
-                             @RequestParam(required = false) Boolean hasContacts, Model model) {
+                               @Valid Provider provider,
+                               BindingResult bindingResult,
+                               @Valid Contacts contacts,
+                               BindingResult bindingResult2,
+                               @RequestParam(required = false) Boolean hasContacts, Model model) {
 
         Provider dbProvider = providerRepository.findByOrgName(provider.getOrgName());
-        if ((dbProvider != null && dbProvider.getId() != provider.getId())) {
+        if (dbProvider != null && !dbProvider.getId().equals(provider.getId())) {
+            model.addAttribute("provider", provider);
+            model.addAttribute("contacts", contacts);
             model.addAttribute("message", "Такая организация уже существует");
             return "provider/edit";
         }
         dbProvider = providerRepository.findById(provider.getId()).get();
         if (bindingResult.hasErrors()) {
+            model.addAttribute("provider", provider);
+            model.addAttribute("contacts", contacts);
+            return "provider/edit";
+        }
+        if(hasContacts == null ? false : hasContacts && bindingResult2.hasErrors()){
+            model.addAttribute("provider", provider);
+            model.addAttribute("contacts", contacts);
             return "provider/edit";
         }
 

@@ -56,19 +56,24 @@ public class ClientController {
     public String createClient(@ModelAttribute("client")
                                @Valid Client client,
                                BindingResult bindingResult,
-                               Contacts contacts,
+                               @Valid Contacts contacts,
+                               BindingResult bindingResult2,
                                @RequestParam(required = false) Boolean hasContacts,
                                Model model) {
 
         Client dbClient = clientRepository.findByLogin(client.getLogin());
         if (dbClient != null) {
-            model.addAttribute("client", new Client());
-            model.addAttribute("contacts", new Contacts());
+            model.addAttribute("client", client);
+            model.addAttribute("contacts", contacts);
             model.addAttribute("message", "Такой логин уже существует");
             return "client/add";
         }
 
         if (bindingResult.hasErrors()) {
+            model.addAttribute("client", client);
+            return "client/add";
+        }
+        if(hasContacts == null ? false : hasContacts && bindingResult2.hasErrors()){
             model.addAttribute("client", client);
             return "client/add";
         }
@@ -118,7 +123,8 @@ public class ClientController {
     public String clientEdit(@ModelAttribute("client")
                              @Valid Client client,
                              BindingResult bindingResult,
-                             Contacts contacts,
+                             @Valid Contacts contacts,
+                             BindingResult bindingResult2,
                              @RequestParam(required = false) String new_password,
                              @RequestParam(required = false) Boolean hasContacts, Model model) {
 
@@ -130,6 +136,10 @@ public class ClientController {
         dbClient = clientRepository.findById(client.getId()).get();
         if (bindingResult.hasErrors()) {
             return "client/edit";
+        }
+        if(hasContacts == null ? false : hasContacts && bindingResult2.hasErrors()){
+            model.addAttribute("client", client);
+            return "client/add";
         }
 
         if (hasContacts == null ? false : hasContacts) {
