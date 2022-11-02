@@ -1,6 +1,7 @@
 package com.example.Acrobatum.models;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.util.List;
 import java.util.stream.Collector;
 
@@ -30,10 +31,22 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotEmpty(message = "Поле не может быть пустым")
+    @Size(min = 1, max = 100, message = "Заполните поле на 1-100 символа")
     private String name;
+
+    @NotEmpty(message = "Поле не может быть пустым")
+    @Size(min = 1, max = 100, message = "Заполните поле на 1-100 символа")
     private String description;
+    @NotNull
+    @PositiveOrZero(message = "Значение должно быть положительным или равным нулю")
     private int quantityInStock;
+
+    @NotEmpty(message = "Поле не может быть пустым")
+    @Size(min = 1, max = 50, message = "Заполните поле на 1-50 символа")
     private String category;
+    @NotNull
+    @Positive(message = "Значение должно быть положительным")
     private double cost;
     @ManyToOne
     @JoinColumn(name = "provider_id", referencedColumnName = "id")

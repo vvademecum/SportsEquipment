@@ -1,6 +1,10 @@
 package com.example.Acrobatum.models;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Contacts {
@@ -9,8 +13,15 @@ public class Contacts {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Pattern(regexp = "^\\+7[0-9]{10}$", message = "Телефон должен иметь вид +72223334455")
     private String phoneNumber;
+    @NotNull
+    @NotEmpty(message = "Поле не может быть пустым")
+    @Size(min = 5, max = 100, message = "Заполните поле на 5-100 символа")
     private String email;
+    @NotNull
+    @NotEmpty(message = "Поле не может быть пустым")
+    @Size(min = 5, max = 200, message = "Заполните поле на 5-200 символа")
     private String address;
 
     @OneToOne(optional = true, mappedBy = "contacts")

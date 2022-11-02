@@ -1,6 +1,9 @@
 package com.example.Acrobatum.models;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
@@ -15,6 +18,9 @@ public class Provider {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @NotNull
+    @NotEmpty(message = "Поле не может быть пустым")
+    @Size(min = 5, max = 100, message = "Заполните поле на 5-100 символа")
     private String orgName;
     @OneToOne(optional = true, cascade = CascadeType.ALL)
     @JoinColumn(name = "contacts_id")

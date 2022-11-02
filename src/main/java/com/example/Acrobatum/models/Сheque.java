@@ -1,6 +1,8 @@
 package com.example.Acrobatum.models;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
@@ -21,6 +23,8 @@ public class Сheque {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotNull
+    @NotEmpty(message = "Поле не может быть пустым")
     private String dateOfPurchase;
 
     @ManyToOne

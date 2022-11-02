@@ -43,7 +43,7 @@ public class ClientController {
 
     @GetMapping("/add")
     public String clientAddPage(@ModelAttribute("client")
-                                @Valid Client client,
+                                Client client,
                                 BindingResult bindingResult,
                                 Model model) {
 

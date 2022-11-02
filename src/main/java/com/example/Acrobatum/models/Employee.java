@@ -54,6 +54,7 @@ public class Employee {
     private String email;
     @Column(unique = true)
     @NotEmpty(message = "Поле не может быть пустым")
+    @Size(min = 5, max = 20, message = "Заполните поле на 5-20 символа")
     private String login;
 
     private String password;

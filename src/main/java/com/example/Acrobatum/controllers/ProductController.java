@@ -44,9 +44,8 @@ public class ProductController {
 
     @GetMapping("/add")
     public String productAddPage(@ModelAttribute("product")
-                                @Valid Product product,
-                                BindingResult bindingResult,
-                                Model model) {
+                                 Product product,
+                                 Model model) {
 
         model.addAttribute("providers", providerRepository.findAll());
         model.addAttribute("characteristics", new Characteristics());
@@ -60,9 +59,10 @@ public class ProductController {
 
     @PostMapping("/add")
     public String productAdd(@ModelAttribute("product")
-                              @Valid Product product,
-                              Characteristics characteristics,
-                              BindingResult bindingResult, Model model) {
+                             @Valid Product product,
+                             BindingResult bindingResult,
+                             Characteristics characteristics,
+                             Model model) {
 
         Product dbProduct = productRepository.findByName(product.getName());
         if (dbProduct != null) {
@@ -71,10 +71,17 @@ public class ProductController {
             model.addAttribute("countries", countryRepository.findAll());
             model.addAttribute("genders", genderRepository.findAll());
             model.addAttribute("seasons", seasonRepository.findAll());
+            model.addAttribute("product", product);
             model.addAttribute("message", "Такой продукт уже существует");
             return "product/add";
         }
         if (bindingResult.hasErrors()) {
+            model.addAttribute("providers", providerRepository.findAll());
+            model.addAttribute("kindsOfSport", kindOfSportRepository.findAll());
+            model.addAttribute("countries", countryRepository.findAll());
+            model.addAttribute("genders", genderRepository.findAll());
+            model.addAttribute("seasons", seasonRepository.findAll());
+            model.addAttribute("product", product);
             return "product/add";
         }
 
@@ -128,8 +135,9 @@ public class ProductController {
     @PostMapping("/edit")
     public String employeeEdit(@ModelAttribute("product")
                                @Valid Product product,
+                               BindingResult bindingResult,
                                Characteristics characteristics,
-                               BindingResult bindingResult, Model model) {
+                               Model model) {
 
         Product dbProduct = productRepository.findByName(product.getName());
         if ((dbProduct != null && dbProduct.getId() != dbProduct.getId())) {
@@ -144,6 +152,7 @@ public class ProductController {
             return "product/edit";
         }
         dbProduct = productRepository.findById(product.getId()).get();
+
         if (bindingResult.hasErrors()) {
             model.addAttribute("product", product);
             model.addAttribute("characteristics", characteristics);

@@ -58,7 +58,7 @@ public class BasketController {
 
     @GetMapping("/add")
     public String basketAddPage(@ModelAttribute("basket")
-                                @Valid Сheque basket,
+                                Сheque basket,
                                 BindingResult bindingResult,
                                 Model model) {
 
@@ -295,7 +295,7 @@ public class BasketController {
             model.addAttribute("positions", positions);
             model.addAttribute("position", new Product_Cheque());
             model.addAttribute("basket", basket);
-            return "basket/add";
+            return "basket/edit";
         }
 
         chequeRepository.save(basket);

@@ -40,7 +40,7 @@ public class EmployeeController {
 
     @GetMapping("/add")
     public String employeeAddPage(@ModelAttribute("employee")
-                                  @Valid Employee employee,
+                                  Employee employee,
                                   BindingResult bindingResult,
                                   Model model) {
         model.addAttribute("roles", roleRepository.findAll());
@@ -59,6 +59,7 @@ public class EmployeeController {
             return "employee/add";
         }
         if (bindingResult.hasErrors()) {
+            model.addAttribute("roles", roleRepository.findAll());
             return "employee/add";
         }
 
@@ -108,6 +109,7 @@ public class EmployeeController {
         }
         dbEmployee = employeeRepository.findById(employee.getId()).get();
         if (bindingResult.hasErrors()) {
+            model.addAttribute("roles", roleRepository.findAll());
             return "employee/edit";
         }
 

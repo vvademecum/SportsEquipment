@@ -3,6 +3,9 @@ package com.example.Acrobatum.models;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
@@ -23,10 +26,20 @@ public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
+    @NotNull
+    @NotEmpty(message = "Поле не может быть пустым")
+    @Size(min = 1, max = 50, message = "Заполните поле на 1-50 символов")
     private String surname;
+    @NotNull
+    @NotEmpty(message = "Поле не может быть пустым")
+    @Size(min = 1, max = 50, message = "Заполните поле на 1-50 символов")
     private String name;
+    @NotNull
+    @NotEmpty(message = "Поле не может быть пустым")
+    @Size(min = 1, max = 50, message = "Заполните поле на 1-50 символов")
     private String patronymic;
+    @Column(unique = true)
+    @NotEmpty(message = "Поле не может быть пустым")
     private String login;
     private String password;
 

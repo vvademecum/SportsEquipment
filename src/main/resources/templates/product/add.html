@@ -58,7 +58,7 @@
         </div>
         <div class="form-group">
             <label class="mt-4 font-weight-bold" for="quantityInStock">Количество на складе:</label>
-            <input type="number" th:field="*{quantityInStock}" class="form-control" id="quantityInStock"
+            <input type="number" min="0" th:field="*{quantityInStock}" class="form-control" id="quantityInStock"
                    placeholder="Количество на складе"/>
             <span class="error text-danger" th:if="${#fields.hasErrors('quantityInStock')}"
                   th:errors="*{quantityInStock}"></span>
@@ -71,7 +71,7 @@
         </div>
         <div class="form-group">
             <label class="mt-4 font-weight-bold" for="cost">Цена:</label>
-            <input type="number" th:field="*{cost}" class="form-control" id="cost"
+            <input type="number" min="1" th:field="*{cost}" class="form-control" id="cost"
                    placeholder="Цена"/>
             <span class="error text-danger" th:if="${#fields.hasErrors('cost')}" th:errors="*{cost}"></span>
         </div>
