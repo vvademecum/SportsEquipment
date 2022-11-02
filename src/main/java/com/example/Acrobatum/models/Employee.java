@@ -1,6 +1,9 @@
 package com.example.Acrobatum.models;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
@@ -25,14 +28,34 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
+    @NotNull
+    @NotEmpty(message = "Поле не может быть пустым")
+    @Size(min = 1, max = 50, message = "Заполните поле на 1-50 символов")
     private String surname;
+    @NotNull
+    @NotEmpty(message = "Поле не может быть пустым")
+    @Size(min = 1, max = 50, message = "Заполните поле на 1-50 символов")
     private String name;
+    @NotNull
+    @NotEmpty(message = "Поле не можнт быть пустым")
+    @Size(min = 1, max = 50, message = "Заполните поле на 1-50 символов")
     private String patronymic;
+    @NotNull
+    @NotEmpty(message = "Поле не может быть пустым")
+    @Size(min = 4, max = 4, message = "Заполните поле на 4 символа")
     private String seriesPassport;
+    @NotNull
+    @NotEmpty(message = "Поле не может быть пустым")
+    @Size(min = 6, max = 6, message = "Заполните поле на 6 символа")
     private String numberPassport;
+    @NotNull
+    @NotEmpty(message = "Поле не может быть пустым")
+    @Size(min = 5, max = 100, message = "Заполните поле на 5-100 символа")
     private String email;
+    @Column(unique = true)
+    @NotEmpty(message = "Поле не может быть пустым")
     private String login;
+
     private String password;
 
     @ManyToOne

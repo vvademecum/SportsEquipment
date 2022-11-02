@@ -20,22 +20,25 @@
             <li class="nav-item">
                 <a class="nav-link" href="/">Главная</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" th:if="${userRole == 'ROLE_ADMIN' || userRole == 'ROLE_HR'}">
                 <a class="nav-link" href="/employee">Сотрудники</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/client">Клиенты</a>
+            <li class="nav-item" th:if="${userRole == 'ROLE_ADMIN' || userRole == 'ROLE_CASHIER'}">
+                <a class="nav-link" href="/client">Клиенты </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" th:if="${userRole == 'ROLE_ADMIN' || userRole == 'ROLE_STOREKEEPER'}">
                 <a class="nav-link" href="/provider">Поставщики</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" th:if="${userRole == 'ROLE_ADMIN' || userRole == 'ROLE_STOREKEEPER'}">
                 <a class="nav-link" href="/product">Товар</a>
             </li>
-            <li class="nav-item active">
+            <li class="nav-item active" th:if="${userRole == 'ROLE_ADMIN' || userRole == 'ROLE_USER' || userRole == 'ROLE_CASHIER'}">
                 <a class="nav-link" href="/basket">Заказы <span class="sr-only">(current)</span></a>
             </li>
         </ul>
+        <form th:action="@{/logout}" method="post">
+            <input type="submit" value="Выйти" class="btn btn-primary">
+        </form>
     </div>
 </nav>
 <body>
@@ -62,7 +65,7 @@
                 <th scope="col" class="text-center">ФИО клиента</th>
                 <th scope="col" class="text-center">ФИО кассира</th>
                 <th scope="col" class="text-center">Товары</th>
-                <th scope="col" class="text-center">Действия</th>
+                <th scope="col" class="text-center" th:if="${userRole == 'ROLE_ADMIN' || userRole == 'ROLE_CASHIER'}">Действия</th>
             </tr>
             </thead>
             <tr th:each="basket : ${baskets}">
@@ -79,7 +82,7 @@
                             <span class="lead fs-7 d-inline" th:if="${position.cheque.id == basket.id}">|</span>
                         </label>
                     </td>
-                    <td scope="col" class="text-center">
+                    <td scope="col" class="text-center" th:if="${userRole == 'ROLE_ADMIN' || userRole == 'ROLE_CASHIER'}">
                         <input type="submit" value="Редактировать"
                                th:formaction="@{/basket/edit}" formmethod="get"
                                class="btn btn-outline-warning mr-2">

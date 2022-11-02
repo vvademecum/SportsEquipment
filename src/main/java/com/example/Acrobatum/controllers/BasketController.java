@@ -66,7 +66,7 @@ public class BasketController {
 
         model.addAttribute("dateNow", dateFormat.format(new Date()));
         model.addAttribute("basket", new Сheque());
-        model.addAttribute("EmpId", getAuthEmployee().getId());
+        model.addAttribute("EmpId", getAuthEmployee() != null ? getAuthEmployee().getId() : 7);
         model.addAttribute("employees", employeeRepository.findAll());
         model.addAttribute("clients", clientRepository.findAll());
         model.addAttribute("products", productRepository.findAll());
@@ -86,7 +86,7 @@ public class BasketController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("dateNow", dateFormat.format(new Date()));
             model.addAttribute("basket", new Сheque());
-            model.addAttribute("EmpId", getAuthEmployee().getId());
+            model.addAttribute("EmpId", getAuthEmployee() != null ? getAuthEmployee().getId() : 7);
             model.addAttribute("employees", employeeRepository.findAll());
             model.addAttribute("clients", clientRepository.findAll());
             model.addAttribute("products", productRepository.findAll());
@@ -113,7 +113,7 @@ public class BasketController {
 
         model.addAttribute("dateNow", dateFormat.format(new Date()));
         model.addAttribute("basket", basket);
-        model.addAttribute("EmpId", getAuthEmployee().getId());
+        model.addAttribute("EmpId", getAuthEmployee() != null ? getAuthEmployee().getId() : 7);
         model.addAttribute("employees", employeeRepository.findAll());
         model.addAttribute("clients", clientRepository.findAll());
         model.addAttribute("products", productRepository.findAll());
@@ -151,7 +151,7 @@ public class BasketController {
 
         model.addAttribute("dateNow", dateFormat.format(new Date()));
         model.addAttribute("basket", basket);
-        model.addAttribute("EmpId", getAuthEmployee().getId());
+        model.addAttribute("EmpId", getAuthEmployee() != null ? getAuthEmployee().getId() : 7);
         model.addAttribute("employees", employeeRepository.findAll());
         model.addAttribute("clients", clientRepository.findAll());
         model.addAttribute("products", productRepository.findAll());
@@ -162,7 +162,12 @@ public class BasketController {
         chequeRepository.save(basket);
         List<Product_Cheque> posWithProduct = product_chequeRepository.findByProductAndCheque(position.getProduct(), basket);
         if (posWithProduct.size() != 0) {
-            product_chequeRepository.deleteAll(posWithProduct);
+            if(posWithProduct.get(0).getQuantity() > position.getQuantity()) {
+                posWithProduct.get(0).setQuantity(posWithProduct.get(0).getQuantity() - position.getQuantity());
+                product_chequeRepository.save(posWithProduct.get(0));
+            }
+            else
+                product_chequeRepository.deleteAll(posWithProduct);
         }
 
         model.addAttribute("positions", product_chequeRepository.findByCheque(basket));
@@ -210,7 +215,7 @@ public class BasketController {
 
         model.addAttribute("dateNow", dateFormat.format(new Date()));
         model.addAttribute("basket", basket);
-        model.addAttribute("EmpId", getAuthEmployee().getId());
+        model.addAttribute("EmpId", getAuthEmployee() != null ? getAuthEmployee().getId() : 7);
         model.addAttribute("employees", employeeRepository.findAll());
         model.addAttribute("clients", clientRepository.findAll());
         model.addAttribute("products", productRepository.findAll());
@@ -248,7 +253,7 @@ public class BasketController {
 
         model.addAttribute("dateNow", dateFormat.format(new Date()));
         model.addAttribute("basket", basket);
-        model.addAttribute("EmpId", getAuthEmployee().getId());
+        model.addAttribute("EmpId", getAuthEmployee() != null ? getAuthEmployee().getId() : 7);
         model.addAttribute("employees", employeeRepository.findAll());
         model.addAttribute("clients", clientRepository.findAll());
         model.addAttribute("products", productRepository.findAll());
@@ -259,7 +264,12 @@ public class BasketController {
         chequeRepository.save(basket);
         List<Product_Cheque> posWithProduct = product_chequeRepository.findByProductAndCheque(position.getProduct(), basket);
         if (posWithProduct.size() != 0) {
-            product_chequeRepository.deleteAll(posWithProduct);
+            if(posWithProduct.get(0).getQuantity() > position.getQuantity()) {
+                posWithProduct.get(0).setQuantity(posWithProduct.get(0).getQuantity() - position.getQuantity());
+                product_chequeRepository.save(posWithProduct.get(0));
+            }
+            else
+                product_chequeRepository.deleteAll(posWithProduct);
         }
 
         model.addAttribute("positions", product_chequeRepository.findByCheque(basket));
@@ -277,7 +287,7 @@ public class BasketController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("dateNow", dateFormat.format(new Date()));
             model.addAttribute("basket", new Сheque());
-            model.addAttribute("EmpId", getAuthEmployee().getId());
+            model.addAttribute("EmpId", getAuthEmployee() != null ? getAuthEmployee().getId() : 7);
             model.addAttribute("employees", employeeRepository.findAll());
             model.addAttribute("clients", clientRepository.findAll());
             model.addAttribute("products", productRepository.findAll());
