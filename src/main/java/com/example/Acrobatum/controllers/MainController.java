@@ -1,7 +1,10 @@
 package com.example.Acrobatum.controllers;
 
+import com.example.Acrobatum.repositories.ProductRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.ServletException;
@@ -12,9 +15,17 @@ import java.io.IOException;
 @Controller
 public class MainController {
 
+    @Autowired
+    ProductRepository productRepository;
 
     @GetMapping("/")
-    public String mainPage() {
+    public String mainPage(Model model) {
+
+
+        model.addAttribute("products", productRepository.findAll());
+
+
+
         return "mainPage";
     }
 

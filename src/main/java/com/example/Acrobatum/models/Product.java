@@ -2,6 +2,7 @@ package com.example.Acrobatum.models;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collector;
 
@@ -55,6 +56,25 @@ public class Product {
     @OneToOne(optional = true, cascade = CascadeType.ALL)
     @JoinColumn(name = "characteristics_id")
     private Characteristics characteristics;
+
+    public List<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(List<Image> images) {
+        this.images = images;
+    }
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY,
+            mappedBy = "product")
+    private List<Image> images = new ArrayList<>();
+    private Long previewImageId;
+
+//    private String photo;
+
+//    @Lob
+//    @Basic(fetch = FetchType.LAZY)
+//    private byte[] photo;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Product_Cheque> product_chequeList;
@@ -130,4 +150,18 @@ public class Product {
     public void setProduct_chequeList(List<Product_Cheque> product_chequeList) {
         this.product_chequeList = product_chequeList;
     }
+
+    public void addImageToProduct(Image image) {
+        image.setProduct(this);
+        images.add(image);
+    }
+
+    public Long getPreviewImageId() {
+        return previewImageId;
+    }
+
+    public void setPreviewImageId(Long previewImageId) {
+        this.previewImageId = previewImageId;
+    }
+
 }

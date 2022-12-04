@@ -1,15 +1,12 @@
 package com.example.Acrobatum.models;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Characteristics {
-    public Characteristics(String guaranteePeriod,
-                           KindOfSport kindOfSport,
-                           Season season,
-                           Gender gender,
-                           Country country
-    ) {
+    public Characteristics(String guaranteePeriod, KindOfSport kindOfSport, Season season, Gender gender, Country country) {
         this.guaranteePeriod = guaranteePeriod;
         this.kindOfSport = kindOfSport;
         this.season = season;
@@ -19,24 +16,20 @@ public class Characteristics {
     public Characteristics(){
 
     }
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
+    @NotEmpty(message = "Поле не может быть пустым")
+    @Size(min = 1, max = 100, message = "Заполните поле на 1-100 символа")
     private String guaranteePeriod;
-
     @OneToOne(optional = true, mappedBy = "characteristics")
     private Product product;
-
     @ManyToOne
     @JoinColumn(name = "kindOfSport_id", referencedColumnName = "id")
     private KindOfSport kindOfSport;
-
     @ManyToOne
     @JoinColumn(name = "season_id", referencedColumnName = "id")
     private Season season;
-
     @ManyToOne
     @JoinColumn(name = "gender_id", referencedColumnName = "id")
     private Gender gender;

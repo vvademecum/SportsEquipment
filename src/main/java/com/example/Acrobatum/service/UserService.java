@@ -13,13 +13,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserService implements UserDetailsService {
-
     @Autowired
     ClientRepository clientRepository;
-
     @Autowired
     EmployeeRepository employeeRepository;
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         String role = "";
@@ -43,7 +40,6 @@ public class UserService implements UserDetailsService {
                     .roles(role)
                     .build();
         }
-
         return userDetails;
     }
 }

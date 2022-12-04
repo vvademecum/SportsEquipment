@@ -1,14 +1,9 @@
 package com.example.Acrobatum.controllers;
 
-import com.example.Acrobatum.models.Client;
 import com.example.Acrobatum.models.Contacts;
 import com.example.Acrobatum.models.Provider;
-import com.example.Acrobatum.repositories.ClientRepository;
 import com.example.Acrobatum.repositories.ContactsRepository;
 import com.example.Acrobatum.repositories.ProviderRepository;
-import org.hibernate.procedure.internal.ProcedureCallImpl;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,10 +15,13 @@ import javax.validation.Valid;
 @RequestMapping("/provider")
 public class ProviderController {
 
-    @Autowired
-    ProviderRepository providerRepository;
-    @Autowired
-    ContactsRepository contactsRepository;
+    final ProviderRepository providerRepository;
+    final ContactsRepository contactsRepository;
+
+    public ProviderController(ProviderRepository providerRepository, ContactsRepository contactsRepository) {
+        this.providerRepository = providerRepository;
+        this.contactsRepository = contactsRepository;
+    }
 
     @GetMapping
     public String providerList(@RequestParam(required = false) String sOrgName, Model model) {

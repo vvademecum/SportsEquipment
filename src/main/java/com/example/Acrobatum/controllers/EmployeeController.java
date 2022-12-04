@@ -1,11 +1,8 @@
 package com.example.Acrobatum.controllers;
 
-import com.example.Acrobatum.models.Client;
 import com.example.Acrobatum.models.Employee;
-import com.example.Acrobatum.repositories.ClientRepository;
 import com.example.Acrobatum.repositories.EmployeeRepository;
 import com.example.Acrobatum.repositories.RoleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,10 +15,13 @@ import javax.validation.Valid;
 @RequestMapping("/employee")
 public class EmployeeController {
 
-    @Autowired
-    EmployeeRepository employeeRepository;
-    @Autowired
-    RoleRepository roleRepository;
+    final EmployeeRepository employeeRepository;
+    final RoleRepository roleRepository;
+
+    public EmployeeController(EmployeeRepository employeeRepository, RoleRepository roleRepository) {
+        this.employeeRepository = employeeRepository;
+        this.roleRepository = roleRepository;
+    }
 
     @GetMapping
     public String employeeList(@RequestParam(required = false) String sName,

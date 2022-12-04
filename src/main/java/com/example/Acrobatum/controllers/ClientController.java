@@ -2,10 +2,8 @@ package com.example.Acrobatum.controllers;
 
 import com.example.Acrobatum.models.Client;
 import com.example.Acrobatum.models.Contacts;
-import com.example.Acrobatum.models.Employee;
 import com.example.Acrobatum.repositories.ClientRepository;
 import com.example.Acrobatum.repositories.ContactsRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,10 +16,13 @@ import javax.validation.Valid;
 @RequestMapping("/client")
 public class ClientController {
 
-    @Autowired
-    ClientRepository clientRepository;
-    @Autowired
-    ContactsRepository contactsRepository;
+    final ClientRepository clientRepository;
+    final ContactsRepository contactsRepository;
+
+    public ClientController(ClientRepository clientRepository, ContactsRepository contactsRepository) {
+        this.clientRepository = clientRepository;
+        this.contactsRepository = contactsRepository;
+    }
 
     @GetMapping
     public String clientList(@RequestParam(required = false) String sName,
@@ -91,9 +92,9 @@ public class ClientController {
             dbContacts.setEmail(contacts.getEmail());
 
             dbClient.setContacts(dbContacts);
-        } else {
+        } else
             dbClient.setContacts(null);
-        }
+
 
         clientRepository.save(dbClient);
 
@@ -103,9 +104,8 @@ public class ClientController {
     @PostMapping("/delete")
     public String clientDelete(@RequestParam long client_id) {
         Client client = clientRepository.findById(client_id).get();
-        if (client != null) {
+        if (client != null)
             clientRepository.delete(client);
-        }
         return "redirect:/client";
     }
 

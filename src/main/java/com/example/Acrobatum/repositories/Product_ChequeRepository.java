@@ -13,7 +13,4 @@ public interface Product_ChequeRepository extends CrudRepository<Product_Cheque,
 
     List<Product_Cheque> findByProductAndCheque(Product product, Сheque cheque);
 
-   // void deleteAllByProductAndCheque(Product product, Сheque cheque);
-
-    //List<Product> findProduct_ChequeBy
 }

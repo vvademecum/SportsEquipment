@@ -1,12 +1,11 @@
 package com.example.Acrobatum.controllers;
 
-import com.example.Acrobatum.models.*;
+import com.example.Acrobatum.models.Employee;
+import com.example.Acrobatum.models.Product_Cheque;
+import com.example.Acrobatum.models.Сheque;
 import com.example.Acrobatum.repositories.*;
-import org.aspectj.weaver.Position;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,16 +21,19 @@ import java.util.List;
 @RequestMapping("/basket")
 public class BasketController {
 
-    @Autowired
-    ChequeRepository chequeRepository;
-    @Autowired
-    ClientRepository clientRepository;
-    @Autowired
-    EmployeeRepository employeeRepository;
-    @Autowired
-    Product_ChequeRepository product_chequeRepository;
-    @Autowired
-    ProductRepository productRepository;
+    final ChequeRepository chequeRepository;
+    final ClientRepository clientRepository;
+    final EmployeeRepository employeeRepository;
+    final Product_ChequeRepository product_chequeRepository;
+    final ProductRepository productRepository;
+
+    public BasketController(ChequeRepository chequeRepository, ClientRepository clientRepository, EmployeeRepository employeeRepository, Product_ChequeRepository product_chequeRepository, ProductRepository productRepository) {
+        this.chequeRepository = chequeRepository;
+        this.clientRepository = clientRepository;
+        this.employeeRepository = employeeRepository;
+        this.product_chequeRepository = product_chequeRepository;
+        this.productRepository = productRepository;
+    }
 
     public Employee getAuthEmployee() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -117,7 +118,6 @@ public class BasketController {
         model.addAttribute("employees", employeeRepository.findAll());
         model.addAttribute("clients", clientRepository.findAll());
         model.addAttribute("products", productRepository.findAll());
-       // model.addAttribute("positions", product_chequeRepository.findAll());
 
         basket.setDateOfPurchase(dateFormat.format(new Date()));
         model.addAttribute("position", position);

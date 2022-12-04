@@ -2,7 +2,6 @@ package com.example.Acrobatum.controllers;
 
 import com.example.Acrobatum.models.Client;
 import com.example.Acrobatum.repositories.ClientRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,8 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/registration")
 public class RegistrationController {
 
-    @Autowired
-    ClientRepository clientRepository;
+    final ClientRepository clientRepository;
+
+    public RegistrationController(ClientRepository clientRepository) {
+        this.clientRepository = clientRepository;
+    }
 
     @GetMapping
     public String registrationPage(@ModelAttribute("client") Client client, Model model) {
