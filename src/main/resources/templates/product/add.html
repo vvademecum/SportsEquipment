@@ -86,12 +86,6 @@
             <span class="error text-danger" th:if="${#fields.hasErrors('provider')}" th:errors="*{provider}"></span>
         </div>
 
-        <div class="form-group">
-            <label class="mt-4 font-weight-bold" for="provider">Фото товара:</label>
-            <input type="file" class="form-control mb-2" name="file">
-<!--            <img id="imgPreview1">-->
-        </div>
-
         <div th:object="${characteristics}">
             <div class="form-group">
                 <label class="mt-4 font-weight-bold" for="guaranteePeriod">Срок гарантии:</label>
@@ -128,12 +122,25 @@
             </div>
         </div>
 
+        <div class="form-group">
+            <label class="mt-4 font-weight-bold" for="provider">Фото товара:</label>
+            <input type="file" class="btn btn-outline-primary form-control mb-2" name="file">
+        </div>
+
+
         <p><input class="btn btn-primary" type="submit" value="Добавить продукт"></p>
-        <div th:if="${message}" th:text="${message}" th:class="${'alert ' + alertClass}"></div>
     </form>
 </content>
 
-
+<script>
+    var uploadField = document.querySelector("input[name=file]");
+    uploadField.onchange = function() {
+        if(this.files[0].size > 3145728){
+            alert("Размер файла превышает 3МБ!");
+            this.value = "";
+        };
+    };
+</script>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>

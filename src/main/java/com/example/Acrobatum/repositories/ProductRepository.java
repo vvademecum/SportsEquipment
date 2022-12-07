@@ -10,8 +10,4 @@ public interface ProductRepository extends CrudRepository<Product, Long> {
 
     List<Product> findByNameContains(String productName);
     Product findByName(String productName);
-
-    //Image findById(Long id);
-    //List<Product> findByName(String title);
-
 }

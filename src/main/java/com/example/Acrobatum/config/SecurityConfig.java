@@ -23,6 +23,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers( "/registration").permitAll()
                 .antMatchers( "/logIn").permitAll()
+                .antMatchers("/product/selectedProduct").permitAll()
                 .antMatchers("/images/**").permitAll()
                 .antMatchers("/client/**").hasAnyRole("ADMIN", "CASHIER")
                 .antMatchers("/employee/**").hasAnyRole("ADMIN", "HR")

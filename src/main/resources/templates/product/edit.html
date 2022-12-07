@@ -41,7 +41,7 @@
 <body>
 
 <content class="container d-flex flex-column align-items-right mt-4">
-    <form th:object="${product}" method="post" th:action="@{/product/edit}">
+    <form th:object="${product}" enctype="multipart/form-data" method="post" th:action="@{/product/edit}">
         <div class="form-group">
             <label class="mt-4 font-weight-bold" for="name">Наименование товара:</label>
             <input type="text" th:field="*{name}" th:value="${product.name}" class="form-control" id="name"
@@ -122,13 +122,27 @@
                 </select>
             </div>
         </div>
+
+        <div class="form-group">
+            <label class="mt-4 font-weight-bold" for="provider">Фото товара:</label>
+            <input type="file" class="btn btn-outline-primary form-control mb-2" name="file">
+        </div>
+
         <input type="hidden" th:field="*{characteristics.id}" th:value="${product.characteristics.id}">
         <input type="hidden" th:field="*{id}" th:value="${product.id}">
         <p><input class="btn btn-primary" type="submit" value="Добавить продукт"></p>
     </form>
 </content>
 
-
+<script>
+    var uploadField = document.querySelector("input[name=file]");
+    uploadField.onchange = function() {
+        if(this.files[0].size > 3145728){
+            alert("Размер файла превышает 3МБ!");
+            this.value = "";
+        };
+    };
+</script>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>

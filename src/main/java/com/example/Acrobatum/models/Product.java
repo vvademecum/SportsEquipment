@@ -57,27 +57,24 @@ public class Product {
     @JoinColumn(name = "characteristics_id")
     private Characteristics characteristics;
 
-    public List<Image> getImages() {
-        return images;
-    }
-
-    public void setImages(List<Image> images) {
-        this.images = images;
-    }
-
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY,
-            mappedBy = "product")
-    private List<Image> images = new ArrayList<>();
-    private Long previewImageId;
-
-//    private String photo;
-
-//    @Lob
-//    @Basic(fetch = FetchType.LAZY)
-//    private byte[] photo;
-
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Product_Cheque> product_chequeList;
+
+    public Image getImage() {
+        return image;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
+    }
+
+//    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY,
+//            mappedBy = "product")
+    @OneToOne(optional = true, cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_id")
+    private Image image;
+    //private Long previewImageId;
+
 
     public Long getId() {
         return id;
@@ -151,17 +148,17 @@ public class Product {
         this.product_chequeList = product_chequeList;
     }
 
-    public void addImageToProduct(Image image) {
-        image.setProduct(this);
-        images.add(image);
-    }
+//    public void addImageToProduct(Image image) {
+//        image.setProduct(this);
+//        this.setImage(image);
+//    }
 
-    public Long getPreviewImageId() {
-        return previewImageId;
-    }
-
-    public void setPreviewImageId(Long previewImageId) {
-        this.previewImageId = previewImageId;
-    }
+//    public Long getPreviewImageId() {
+//        return previewImageId;
+//    }
+//
+//    public void setPreviewImageId(Long previewImageId) {
+//        this.previewImageId = previewImageId;
+//    }
 
 }

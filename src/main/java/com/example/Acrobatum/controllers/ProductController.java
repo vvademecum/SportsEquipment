@@ -1,10 +1,11 @@
 package com.example.Acrobatum.controllers;
 
 import com.example.Acrobatum.models.Characteristics;
+import com.example.Acrobatum.models.Image;
 import com.example.Acrobatum.models.Product;
+import com.example.Acrobatum.models.Product_Cheque;
 import com.example.Acrobatum.repositories.*;
 import com.example.Acrobatum.service.ProductService;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,9 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.io.File;
 import java.io.IOException;
-import java.util.UUID;
 
 @Controller
 @RequestMapping("/product")
@@ -27,8 +26,10 @@ public class ProductController {
     final GenderRepository genderRepository;
     final SeasonRepository seasonRepository;
     final CountryRepository countryRepository;
+    final ImageRepository imageRepository;
+    final Product_ChequeRepository position;
 
-    public ProductController(ProductService productService, ProductRepository productRepository, ProviderRepository providerRepository, CharacteristicsRepository characteristicsRepository, KindOfSportRepository kindOfSportRepository, GenderRepository genderRepository, SeasonRepository seasonRepository, CountryRepository countryRepository) {
+    public ProductController(ProductService productService, ProductRepository productRepository, ProviderRepository providerRepository, CharacteristicsRepository characteristicsRepository, KindOfSportRepository kindOfSportRepository, GenderRepository genderRepository, SeasonRepository seasonRepository, CountryRepository countryRepository, ImageRepository imageRepository, Product_ChequeRepository product_chequeRepository) {
         this.productService = productService;
         this.productRepository = productRepository;
         this.providerRepository = providerRepository;
@@ -37,6 +38,8 @@ public class ProductController {
         this.genderRepository = genderRepository;
         this.seasonRepository = seasonRepository;
         this.countryRepository = countryRepository;
+        this.imageRepository = imageRepository;
+        this.position = product_chequeRepository;
     }
 
     @GetMapping
@@ -66,18 +69,28 @@ public class ProductController {
         return "product/add";
     }
 
-    @Value("${productsPhoto.path}")
-    private String uploadPath;
+    @GetMapping("/selectedProduct")
+    public String getOneProduct(@RequestParam(required = false) String text,
+                                @RequestParam long id, Model model) {
+
+        Product product = productRepository.findById(id).get();
+        model.addAttribute("product", product);
+        Characteristics characteristics = characteristicsRepository.findByProductId(id);
+        model.addAttribute("characteristics", characteristics);
+
+
+        return "product/productPage";
+    }
 
     @PostMapping("/add")
     public String productAdd(
-                            @RequestParam("file") MultipartFile file,
-                            @ModelAttribute("product")
-                            @Valid Product product,
-                            BindingResult bindingResult,
-                            @Valid Characteristics characteristics,
-                            BindingResult bindingResult2,
-                            Model model) throws IOException {
+            @RequestParam("file") MultipartFile file,
+            @ModelAttribute("product")
+            @Valid Product product,
+            BindingResult bindingResult,
+            @Valid Characteristics characteristics,
+            BindingResult bindingResult2,
+            Model model) throws IOException {
 
         Product dbProduct = productRepository.findByName(product.getName());
         if (dbProduct != null) {
@@ -119,23 +132,7 @@ public class ProductController {
         );
 
         productService.saveProduct(dbProduct, file);
-
-//        if (file != null) {
-//            File uploadDir = new File(uploadPath);
-//            if (!uploadDir.exists())
-//                uploadDir.mkdir();
-//            String uuidFile = UUID.randomUUID().toString();
-//            String resultFile = product.getName() + uuidFile + "." + file.getOriginalFilename().split("\\.")[1];
-//
-//            try {
-//                file.transferTo(new File(uploadDir + "/" + resultFile));
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
-//            dbProduct.setPhoto(resultFile);
-//        }
         productRepository.save(dbProduct);
-
         return "redirect:/product";
     }
 
@@ -154,6 +151,8 @@ public class ProductController {
         Product product = productRepository.findById(product_id).get();
         Characteristics characteristics = characteristicsRepository.findByProductId(product_id);
         model.addAttribute("product", product);
+        if (imageRepository.findByProductId(product_id) != null)
+            model.addAttribute("image", imageRepository.findByProductId(product_id));
         model.addAttribute("characteristics", characteristics);
         model.addAttribute("providers", providerRepository.findAll());
         model.addAttribute("kindsOfSport", kindOfSportRepository.findAll());
@@ -165,11 +164,14 @@ public class ProductController {
     }
 
     @PostMapping("/edit")
-    public String employeeEdit(@ModelAttribute("product")
-                               @Valid Product product,
-                               BindingResult bindingResult,
-                               Characteristics characteristics,
-                               Model model) {
+    public String productEdit(@RequestParam("file") MultipartFile file,
+                              @ModelAttribute("product")
+                              @Valid Product product,
+                              @Valid Image image,
+                              BindingResult bindingResult,
+                              BindingResult bindingResult1,
+                              Characteristics characteristics,
+                              Model model) throws IOException {
 
         Product dbProduct = productRepository.findByName(product.getName());
         if ((dbProduct != null && dbProduct.getId() != dbProduct.getId())) {
@@ -211,6 +213,8 @@ public class ProductController {
         dbProduct.setCost(product.getCost());
         dbProduct.setProvider(product.getProvider());
         dbProduct.setCharacteristics(dbCharacteristics);
+
+        productService.saveProduct(dbProduct, file);
         productRepository.save(dbProduct);
 
         return "redirect:/product";

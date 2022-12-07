@@ -65,9 +65,9 @@ public class BasketController {
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-        model.addAttribute("dateNow", dateFormat.format(new Date()));
         model.addAttribute("basket", new Сheque());
-        model.addAttribute("EmpId", getAuthEmployee() != null ? getAuthEmployee().getId() : 7);
+        model.addAttribute("dateNow", dateFormat.format(new Date()));
+        model.addAttribute("empId", getAuthEmployee() != null ? getAuthEmployee().getId() : 7);
         model.addAttribute("employees", employeeRepository.findAll());
         model.addAttribute("clients", clientRepository.findAll());
         model.addAttribute("products", productRepository.findAll());
@@ -87,7 +87,7 @@ public class BasketController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("dateNow", dateFormat.format(new Date()));
             model.addAttribute("basket", new Сheque());
-            model.addAttribute("EmpId", getAuthEmployee() != null ? getAuthEmployee().getId() : 7);
+            model.addAttribute("empId", getAuthEmployee() != null ? getAuthEmployee().getId() : 7);
             model.addAttribute("employees", employeeRepository.findAll());
             model.addAttribute("clients", clientRepository.findAll());
             model.addAttribute("products", productRepository.findAll());
@@ -114,7 +114,7 @@ public class BasketController {
 
         model.addAttribute("dateNow", dateFormat.format(new Date()));
         model.addAttribute("basket", basket);
-        model.addAttribute("EmpId", getAuthEmployee() != null ? getAuthEmployee().getId() : 7);
+        model.addAttribute("empId", getAuthEmployee() != null ? getAuthEmployee().getId() : 7);
         model.addAttribute("employees", employeeRepository.findAll());
         model.addAttribute("clients", clientRepository.findAll());
         model.addAttribute("products", productRepository.findAll());
@@ -151,7 +151,7 @@ public class BasketController {
 
         model.addAttribute("dateNow", dateFormat.format(new Date()));
         model.addAttribute("basket", basket);
-        model.addAttribute("EmpId", getAuthEmployee() != null ? getAuthEmployee().getId() : 7);
+        model.addAttribute("empId", getAuthEmployee() != null ? getAuthEmployee().getId() : 7);
         model.addAttribute("employees", employeeRepository.findAll());
         model.addAttribute("clients", clientRepository.findAll());
         model.addAttribute("products", productRepository.findAll());
@@ -215,7 +215,7 @@ public class BasketController {
 
         model.addAttribute("dateNow", dateFormat.format(new Date()));
         model.addAttribute("basket", basket);
-        model.addAttribute("EmpId", getAuthEmployee() != null ? getAuthEmployee().getId() : 7);
+        model.addAttribute("empId", getAuthEmployee() != null ? getAuthEmployee().getId() : 7);
         model.addAttribute("employees", employeeRepository.findAll());
         model.addAttribute("clients", clientRepository.findAll());
         model.addAttribute("products", productRepository.findAll());
@@ -253,7 +253,7 @@ public class BasketController {
 
         model.addAttribute("dateNow", dateFormat.format(new Date()));
         model.addAttribute("basket", basket);
-        model.addAttribute("EmpId", getAuthEmployee() != null ? getAuthEmployee().getId() : 7);
+        model.addAttribute("empId", getAuthEmployee() != null ? getAuthEmployee().getId() : 7);
         model.addAttribute("employees", employeeRepository.findAll());
         model.addAttribute("clients", clientRepository.findAll());
         model.addAttribute("products", productRepository.findAll());
@@ -287,7 +287,7 @@ public class BasketController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("dateNow", dateFormat.format(new Date()));
             model.addAttribute("basket", new Сheque());
-            model.addAttribute("EmpId", getAuthEmployee() != null ? getAuthEmployee().getId() : 7);
+            model.addAttribute("empId", getAuthEmployee() != null ? getAuthEmployee().getId() : 7);
             model.addAttribute("employees", employeeRepository.findAll());
             model.addAttribute("clients", clientRepository.findAll());
             model.addAttribute("products", productRepository.findAll());

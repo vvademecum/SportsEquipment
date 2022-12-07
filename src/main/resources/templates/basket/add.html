@@ -92,7 +92,7 @@
             <label class="mt-4 font-weight-bold" for="employee">Кассир:</label>
             <select name="employee_id" class="form-control mb-2" id="employee" th:field="*{employee}">
                 <option th:each="employee : ${employees}" th:value="${employee.id}"
-                        th:selected="${employee.id == EmpId}"
+                        th:selected="${employee.id == empId}"
                         th:text="${employee.surname} + ' ' + ${#strings.substring(employee.name, 0, 1)} + '. ' + ${#strings.substring(employee.patronymic, 0, 1)} + '. '"></option>
             </select>
             <span class="error text-danger" th:if="${#fields.hasErrors('employee')}" th:errors="*{employee}"></span>

@@ -1,10 +1,178 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+    <a class="navbar-brand" href="/">
+        <img src="images/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
+        ACROBATUM
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="/">Главная <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item" th:if="${userRole == 'ROLE_ADMIN' || userRole == 'ROLE_HR'}">
+                <a class="nav-link" href="/employee">Сотрудники</a>
+            </li>
+            <li class="nav-item" th:if="${userRole == 'ROLE_ADMIN' || userRole == 'ROLE_CASHIER'}">
+                <a class="nav-link" href="/client">Клиенты</a>
+            </li>
+            <li class="nav-item" th:if="${userRole == 'ROLE_ADMIN' || userRole == 'ROLE_STOREKEEPER'}">
+                <a class="nav-link" href="/provider">Поставщики</a>
+            </li>
+            <li class="nav-item" th:if="${userRole == 'ROLE_ADMIN' || userRole == 'ROLE_STOREKEEPER'}">
+                <a class="nav-link" href="/product">Товар</a>
+            </li>
+            <li class="nav-item"
+                th:if="${userRole == 'ROLE_ADMIN' || userRole == 'ROLE_USER' || userRole == 'ROLE_CASHIER'}">
+                <a class="nav-link" href="/basket">Заказы</a>
+            </li>
+            <li class="nav-item"
+                th:if="${userRole == 'ROLE_ADMIN' || userRole == 'ROLE_USER'}">
+                <a class="nav-link" href="/basket">Корзина</a>
+            </li>
+        </ul>
+        <form th:action="@{/logout}" method="post">
+            <input type="submit" value="Выйти" class="btn btn-primary">
+        </form>
+    </div>
+</nav>
 
+<content class="container d-flex flex-column align-items-right mt-4">
+    <form th:object="${product}" method="post" th:action="@{/cart/addPos}">
+        <div class="container">
+            <h2 class="pt-4" th:text="${product.name}"></h2>
+
+            <div class="row">
+
+                <div class="col-sm">
+                    <p class="font-weight-bold lead text-danger" th:if="${product.quantityInStock} < 1">
+                        <label>Нет в наличии</label>
+                    </p>
+                    <p class="font-weight-bold">Описание:
+                        <label class="font-weight-normal" th:text="${product.description}"></label>
+                    </p>
+                    <p class="font-weight-bold">Категория:
+                        <label class="font-weight-normal" th:text="${product.category}"></label>
+                    </p>
+
+                    <div th:object="${characteristics}">
+                        <p class="font-weight-bold">Срок гарантии:
+                            <label class="font-weight-normal" th:text="${characteristics.guaranteePeriod}"></label>
+                        </p>
+                        <p class="font-weight-bold">Вид спорта:
+                            <label class="font-weight-normal"
+                                   th:text="${characteristics.kindOfSport.kindOfSport}"></label>
+                        </p>
+                        <p class="font-weight-bold">Сезон:
+                            <label class="font-weight-normal" th:text="${characteristics.season.season}"></label>
+                        </p>
+                        <p class="font-weight-bold">Пол:
+                            <label class="font-weight-normal" th:text="${characteristics.gender.gender}"></label>
+                        </p>
+                        <p class="font-weight-bold">Страна производства:
+                            <label class="font-weight-normal" th:text="${characteristics.country.country}"></label>
+                        </p>
+                    </div>
+
+                    <p class="font-weight-bold">Цена:
+                        <label class="font-weight-normal" th:text="${product.cost}"></label>
+                    </p>
+                </div>
+                <div class="col-sm" align="center">
+                    <img class="rounded img-fluid pt-4 align-center" th:src="'/images/' + ${product.id}" alt="">
+                </div>
+
+            </div>
+        </div>
+
+
+        <!--        <div th:object="${position}">-->
+        <div class="form-row">
+            <div class="form-group col-md-1">
+                <input type="button" class="form-control btn btn-outline-danger" value="-" onclick="DecrNum()"
+                       name="dec"/>
+            </div>
+            <div class="form-group col-md-2">
+                <input type="number" min="1" name="quantity" value="1" class="form-control mb-2" id="quantity"
+                       placeholder="Количество"/>
+            </div>
+            <div class="form-group col-md-1">
+                <input type="button" class="form-control btn btn-outline-success" value="+" onclick="IncrNum()"
+                       name="inc"/>
+            </div>
+        </div>
+        <div class="lead fs-7 d-inline" th:each="position : ${positions}">
+            <p class="lead fs-7 d-inline p-2" th:text="${position.product.name}"></p>
+            <p class="lead fs-7 d-inline p-2" th:text="' x' + ${position.quantity}"></p>
+            <br>
+        </div>
+        <p><input class="btn btn-primary" type="submit" value="Добавить продукт" ></p>
+
+
+        <!--        <div>-->
+        <!--            <div class="d-flex flex-row">-->
+        <!--                <label class="mt-4 font-weight-bold col-sm-6" for="quantity">Количество:</label>-->
+        <!--            </div>-->
+        <!--            <div class="d-flex flex-row">-->
+        <!--                <select name="product_id" class="form-control mb-2 mr-3" id="product" th:field="*{product}">-->
+        <!--                    <option th:each="product : ${products}" th:value="${product.id}"-->
+        <!--                            th:text="${product.name}"></option>-->
+        <!--                </select>-->
+
+        <!--                <input type="number" min="1" th:field="*{quantity}" value="1" class="form-control mb-2" id="quantity"-->
+        <!--                       placeholder="Количество"/>-->
+        <!--            </div>-->
+
+        <!--            <div class="lead fs-7 d-inline" th:each="position : ${positions}">-->
+        <!--                <p class="lead fs-7 d-inline p-2" th:text="${position.product.name}"></p>-->
+        <!--                <p class="lead fs-7 d-inline p-2" th:text="' x' + ${position.quantity}"></p>-->
+        <!--                <br>-->
+        <!--            </div>-->
+        <!--            <div class="form-control btn-group mb-4">-->
+        <!--                <button formaction="/basket/addProduct" formmethod="get" class="form-control btn btn-outline-success">-->
+        <!--                    Добавить товар-->
+        <!--                </button>-->
+        <!--                <button formaction="/basket/removeProduct" formmethod="get" class="form-control btn btn-outline-danger">-->
+        <!--                    Удалить товар-->
+        <!--                </button>-->
+        <!--            </div>-->
+        <!--        </div>-->
+
+        <input type="hidden" th:field="*{characteristics.id}" th:value="${product.characteristics.id}">
+        <input type="hidden" th:field="*{id}" th:value="${product.id}">
+
+    </form>
+</content>
+
+<script>
+    function IncrNum() {
+        document.querySelector("input[name=quantity]").value++;
+    }
+
+    function DecrNum() {
+        if (document.querySelector("input[name=quantity]").value > 1)
+            document.querySelector("input[name=quantity]").value--;
+    }
+</script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
 </body>
 </html>
