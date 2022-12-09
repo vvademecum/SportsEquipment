@@ -51,20 +51,23 @@
 <div class="d-flex flex-column align-items-center justify-content-center mt-3">
     <div class="col-sm-12">
         <p><h4 class="display-8 p-3" th:if="${notEmpty == 'n'}">Корзина пуста</h4></p>
-        <form>
 
-            <table class="table table-bordered" th:if="${notEmpty == 'y'}">
+
+        <table class="table table-bordered" th:if="${notEmpty == 'y'}">
+            <form>
                 <input type="submit" value="Очистить корзину" class="btn btn-outline-danger mb-3"
                        th:formaction="@{/cart/clear}" formmethod="get">
-                <thead>
-                <tr>
-                    <th scope="col" class="text-center">Товар</th>
-                    <th scope="col" class="text-center">Количество</th>
-                    <th scope="col" class="text-center">Цена</th>
-                </tr>
-                </thead>
-                <tr th:each="cart : ${carts}">
+            </form>
 
+            <thead>
+            <tr>
+                <th scope="col" class="text-center">Товар</th>
+                <th scope="col" class="text-center">Количество</th>
+                <th scope="col" class="text-center">Цена</th>
+            </tr>
+            </thead>
+            <tr th:each="cart : ${carts}">
+                <form>
                     <td scope="col" class="text-center"><span class="lead fs-7 d-inline"
                                                               th:text="${cart.getKey().getName()}"></span></td>
                     <td scope="col" class="text-center"><span class="lead fs-7 d-inline"
@@ -81,10 +84,10 @@
                     </td>
                     <input type="hidden" name="position_id" th:value="${cart.getKey().getId()}">
                     <!--                    <input type="hidden" name="client_id" th:value="${client.id}">-->
+                </form>
 
-                </tr>
-            </table>
-        </form>
+            </tr>
+        </table>
     </div>
 </div>
 

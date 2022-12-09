@@ -8,11 +8,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 @ControllerAdvice
 public class Util {
     @ModelAttribute
-    public void sharedData(Model model, HttpSession session, Principal principal) {
+    public void sharedData(Model model, HttpSession session) {
         boolean isCartActive = false;
 
         if (session.getAttribute("cart") != null) {

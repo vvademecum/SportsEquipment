@@ -71,7 +71,7 @@ public class CartController {
 
 
     @GetMapping()
-    public String cartMainPage(@ModelAttribute("carts")
+    public String cartMainPage(
                                Сheque basket,
                                HttpSession session,
                                Model model) {
@@ -95,21 +95,22 @@ public class CartController {
     }
 
     @GetMapping("/clear")
-    public String clearCart(@ModelAttribute("carts")
+    public String clearCart(
                             HttpSession session,
                             Model model) {
         carts.clear();
-        session.setAttribute("cart", null);
+        session.removeAttribute("cart");
 
         return "redirect:/cart";
     }
 
     @GetMapping("/decProd")
-    public String decProd(@ModelAttribute("carts")
-                            @RequestParam long position_id,
+    public String decProd(
+                            @RequestParam Long position_id,
                             HttpSession session,
                             Model model) {
 
+        //System.out.println(position_id);
         carts.put(position_id, carts.get(position_id) - 1);
 
         return "redirect:/cart";
