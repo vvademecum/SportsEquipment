@@ -12,8 +12,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
+
+import static com.example.Acrobatum.controllers.CartController.carts;
 
 @Controller
 @RequestMapping("/product")
@@ -49,7 +52,6 @@ public class ProductController {
         } else {
             model.addAttribute("products", productRepository.findAll());
         }
-        //model.addAttribute("providers", providerRepository.findAll());
 
         return "product/main";
     }
@@ -71,13 +73,17 @@ public class ProductController {
 
     @GetMapping("/selectedProduct")
     public String getOneProduct(@RequestParam(required = false) String text,
-                                @RequestParam long id, Model model) {
+                                @RequestParam long id, Model model, HttpSession session) {
 
         Product product = productRepository.findById(id).get();
         model.addAttribute("product", product);
         Characteristics characteristics = characteristicsRepository.findByProductId(id);
         model.addAttribute("characteristics", characteristics);
 
+        if (session.getAttribute("cart") == null)
+            model.addAttribute("carts", null);
+        else
+            model.addAttribute("carts", carts.get(id));
 
         return "product/productPage";
     }

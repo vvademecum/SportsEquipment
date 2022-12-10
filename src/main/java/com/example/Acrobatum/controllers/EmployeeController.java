@@ -122,6 +122,8 @@ public class EmployeeController {
         dbEmployee.setPatronymic(employee.getPatronymic());
         dbEmployee.setEmail(employee.getEmail());
         dbEmployee.setRole(employee.getRole());
+        dbEmployee.setSeriesPassport(employee.getSeriesPassport());
+        dbEmployee.setNumberPassport(employee.getNumberPassport());
 
         employeeRepository.save(dbEmployee);
         return "redirect:/employee";

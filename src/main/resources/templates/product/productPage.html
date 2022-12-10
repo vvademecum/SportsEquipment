@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -39,7 +39,7 @@
             </li>
             <li class="nav-item"
                 th:if="${userRole == 'ROLE_ADMIN' || userRole == 'ROLE_USER'}">
-                <a class="nav-link" href="/basket">Корзина</a>
+                <a class="nav-link" href="/cart">Корзина</a>
             </li>
         </ul>
         <form th:action="@{/logout}" method="post">
@@ -52,9 +52,7 @@
     <form th:object="${product}" method="post" th:action="@{/cart/addPos}">
         <div class="container">
             <h2 class="pt-4" th:text="${product.name}"></h2>
-
             <div class="row">
-
                 <div class="col-sm">
                     <p class="font-weight-bold lead text-danger" th:if="${product.quantityInStock} < 1">
                         <label>Нет в наличии</label>
@@ -96,58 +94,27 @@
             </div>
         </div>
 
-
-        <!--        <div th:object="${position}">-->
-        <div class="form-row">
+        <div class="form-row" th:if="${product.quantityInStock} >= 1">
             <div class="form-group col-md-1">
                 <input type="button" class="form-control btn btn-outline-danger" value="-" onclick="DecrNum()"
                        name="dec"/>
             </div>
-            <div class="form-group col-md-2">
-                <input type="number" min="1" name="quantity" value="1" class="form-control mb-2" id="quantity"
+            <div class="form-group col-md-1">
+                <input type="hidden" min="1" th:value="${carts}" th:align="center" name="quantity" value="1" class="form-control mb-2"
                        placeholder="Количество"/>
+                <input type="number" min="1" th:value="${carts}" th:align="center" name="quantity1" value="1" class="form-control mb-2"
+                       placeholder="Количество" disabled/>
             </div>
             <div class="form-group col-md-1">
                 <input type="button" class="form-control btn btn-outline-success" value="+" onclick="IncrNum()"
                        name="inc"/>
             </div>
         </div>
-        <div class="lead fs-7 d-inline" th:each="position : ${positions}">
-            <p class="lead fs-7 d-inline p-2" th:text="${position.product.name}"></p>
-            <p class="lead fs-7 d-inline p-2" th:text="' x' + ${position.quantity}"></p>
-            <br>
-        </div>
-        <p><input class="btn btn-primary" type="submit" value="Добавить продукт" ></p>
 
+        <input type="hidden" name="isMainPage" th:value="${false}">
 
-        <!--        <div>-->
-        <!--            <div class="d-flex flex-row">-->
-        <!--                <label class="mt-4 font-weight-bold col-sm-6" for="quantity">Количество:</label>-->
-        <!--            </div>-->
-        <!--            <div class="d-flex flex-row">-->
-        <!--                <select name="product_id" class="form-control mb-2 mr-3" id="product" th:field="*{product}">-->
-        <!--                    <option th:each="product : ${products}" th:value="${product.id}"-->
-        <!--                            th:text="${product.name}"></option>-->
-        <!--                </select>-->
-
-        <!--                <input type="number" min="1" th:field="*{quantity}" value="1" class="form-control mb-2" id="quantity"-->
-        <!--                       placeholder="Количество"/>-->
-        <!--            </div>-->
-
-        <!--            <div class="lead fs-7 d-inline" th:each="position : ${positions}">-->
-        <!--                <p class="lead fs-7 d-inline p-2" th:text="${position.product.name}"></p>-->
-        <!--                <p class="lead fs-7 d-inline p-2" th:text="' x' + ${position.quantity}"></p>-->
-        <!--                <br>-->
-        <!--            </div>-->
-        <!--            <div class="form-control btn-group mb-4">-->
-        <!--                <button formaction="/basket/addProduct" formmethod="get" class="form-control btn btn-outline-success">-->
-        <!--                    Добавить товар-->
-        <!--                </button>-->
-        <!--                <button formaction="/basket/removeProduct" formmethod="get" class="form-control btn btn-outline-danger">-->
-        <!--                    Удалить товар-->
-        <!--                </button>-->
-        <!--            </div>-->
-        <!--        </div>-->
+        <p><input class="btn btn-primary" type="submit" value="Добавить продукт" th:if="${product.quantityInStock} >= 1"></p>
+        <p><input type="submit" class="btn btn-danger" value="Нет в наличии" th:if="${product.quantityInStock} < 1" disabled></p>
 
         <input type="hidden" th:field="*{characteristics.id}" th:value="${product.characteristics.id}">
         <input type="hidden" th:field="*{id}" th:value="${product.id}">
@@ -158,11 +125,14 @@
 <script>
     function IncrNum() {
         document.querySelector("input[name=quantity]").value++;
+        document.querySelector("input[name=quantity1]").value++;
     }
 
     function DecrNum() {
-        if (document.querySelector("input[name=quantity]").value > 1)
+        if (document.querySelector("input[name=quantity]").value > 1) {
             document.querySelector("input[name=quantity]").value--;
+            document.querySelector("input[name=quantity1]").value--;
+        }
     }
 </script>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"

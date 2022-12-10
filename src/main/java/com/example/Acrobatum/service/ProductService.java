@@ -25,10 +25,8 @@ public class ProductService {
             image.setPreviewImage(true);
             product.setImage(image);
         }
-
         productRepository.save(product);
     }
-
     private Image toImageEntity(MultipartFile file, Product product) throws IOException {
         Image image;
         if(product.getImage() != null)
@@ -42,11 +40,9 @@ public class ProductService {
         image.setBytes(file.getBytes());
         return image;
     }
-
     public void deleteProduct(Long id) {
         productRepository.deleteById(id);
     }
-
     public Product getProductById(Long id) {
         return productRepository.findById(id).orElse(null);
     }

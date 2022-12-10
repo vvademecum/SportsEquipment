@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -70,27 +70,39 @@
                 <form>
                     <td scope="col" class="text-center"><span class="lead fs-7 d-inline"
                                                               th:text="${cart.getKey().getName()}"></span></td>
+
                     <td scope="col" class="text-center"><span class="lead fs-7 d-inline"
-                                                              th:text="${cart.getValue()}"></span></td>
+                                                              th:text="${cart.getValue()}"></span>
+                        <p><span th:if="${cart.getKey().getQuantityInStock() < cart.getValue()}"
+                              class="badge rounded-pill bg-danger">Не хватает на складе</span></p>
+                    </td>
+                    <input type="hidden" name="quantityProd" th:value="${cart.getValue()}">
                     <td scope="col" class="text-center"><span class="lead fs-7 d-inline"
                                                               th:text="${cart.getKey().getCost() * cart.getValue()}"></span>
                     </td>
                     <td scope="col" class="text-center">
                         <input type="submit" value="-"
                                th:formaction="@{/cart/decProd}" formmethod="get"
-                               class="btn btn-outline-warning mr-2">
-                        <input type="submit" value="+" class="btn btn-outline-danger"
+                               class="btn btn-outline-danger mr-2">
+                        <input type="submit" value="+" class="btn btn-outline-success"
                                th:formaction="@{/cart/incProd}" formmethod="get">
                     </td>
-                    <input type="hidden" name="position_id" th:value="${cart.getKey().getId()}">
-                    <!--                    <input type="hidden" name="client_id" th:value="${client.id}">-->
+                    <input type="hidden" name="cartPage" th:value="${true}">
+                    <input type="hidden" name="id" th:value="${cart.getKey().getId()}">
                 </form>
-
             </tr>
         </table>
+        <form th:if="${notEmpty == 'y'}">
+            <input type="hidden" th:value="${notEnough}">
+            <p class="font-weight-bold">Итог:
+                <label class="font-weight-normal" th:text="${result} + ' ₽'"></label>
+            </p>
+            <input type="submit" value="Оформить заказ"
+                   th:formaction="@{/cart/addOrder}" formmethod="post"
+                   class="btn btn-primary mr-2">
+        </form>
     </div>
 </div>
-
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"

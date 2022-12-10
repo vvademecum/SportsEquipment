@@ -139,7 +139,7 @@ public class ClientController {
         }
         if(hasContacts == null ? false : hasContacts && bindingResult2.hasErrors()){
             model.addAttribute("client", client);
-            return "client/add";
+            return "client/edit";
         }
 
         if (hasContacts == null ? false : hasContacts) {
@@ -165,5 +165,4 @@ public class ClientController {
 
         return "redirect:/client";
     }
-
 }

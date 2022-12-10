@@ -24,7 +24,7 @@ public class SecurityConfig {
                 .antMatchers( "/registration").permitAll()
                 .antMatchers( "/logIn").permitAll()
                 .antMatchers("/product/selectedProduct").permitAll()
-                .antMatchers("/images/**").permitAll()
+                .antMatchers("/images/logo.png").permitAll()
                 .antMatchers("/client/**").hasAnyRole("ADMIN", "CASHIER")
                 .antMatchers("/employee/**").hasAnyRole("ADMIN", "HR")
                 .antMatchers("/product/**").hasAnyRole("ADMIN", "STOREKEEPER")
