@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+    <a class="navbar-brand" href="/">
+        <img src="images/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
+        ACROBATUM
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active" th:if="${userRole == 'ROLE_ADMIN'}">
+                <a class="nav-link" href="/backup">Управление базой<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item" th:if="${userRole == 'ROLE_ADMIN' || userRole == 'ROLE_HR'}">
+                <a class="nav-link" href="/employee">Сотрудники</a>
+            </li>
+            <li class="nav-item" th:if="${userRole == 'ROLE_ADMIN' || userRole == 'ROLE_CASHIER'}">
+                <a class="nav-link" href="/client">Клиенты</a>
+            </li>
+            <li class="nav-item" th:if="${userRole == 'ROLE_ADMIN' || userRole == 'ROLE_STOREKEEPER'}">
+                <a class="nav-link" href="/provider">Поставщики</a>
+            </li>
+            <li class="nav-item" th:if="${userRole == 'ROLE_ADMIN' || userRole == 'ROLE_STOREKEEPER'}">
+                <a class="nav-link" href="/product">Товар</a>
+            </li>
+            <li class="nav-item"
+                th:if="${userRole == 'ROLE_ADMIN' || userRole == 'ROLE_USER' || userRole == 'ROLE_CASHIER'}">
+                <a class="nav-link" href="/basket">Заказы</a>
+            </li>
+            <li class="nav-item" th:if="${userRole == 'ROLE_USER'}">
+                <a class="nav-link" href="/cart">Корзина</a>
+            </li>
+        </ul>
+        <form th:action="@{/logout}" method="post">
+            <input type="submit" value="Выйти" class="btn btn-primary">
+        </form>
+    </div>
+</nav>
+
+<div class="d-flex container flex-column align-items-center justify-content-center mt-3 col-sm-8">
+    <form method="get" th:action="@{/backup/downloadSQL}"
+          class="form-horizontal d-flex flex-row align-items-center justify-content-center col-sm-5">
+        <input type="submit" value="Скачать скрипт" class="btn btn-success margin-left">
+        <div class="custom-control custom-checkbox mr-sm-2 ml-2 mt-3 mb-3">
+            <input type="checkbox" class="custom-control-input" name="withData" value="1" id="flexCheckChecked" checked>
+            <label class="custom-control-label" for="flexCheckChecked">Загрузка с данными</label>
+        </div>
+    </form>
+    <form method="get" th:action="@{/backup/createDump}"
+          class="form-horizontal d-flex flex-column align-items-center justify-content-center col-sm-5">
+        <input type="submit" value="Создать резервную копию" class="btn btn-warning">
+    </form>
+</div>
+
+<div class="d-flex flex-row align-items-center justify-content-right mt-3">
+    <form method="post" th:action="@{/backup/upload}" enctype="multipart/form-data"
+          class="form-horizontal d-flex flex-row align-items-center justify-content-center col-sm-12">
+        <input type="file" name="file" class="form-control mr-3" accept=".sql">
+        <input type="submit" value="Загрузить резервную копию" class="btn btn-info text-white">
+    </form>
+</div>
+
+<div class="d-flex flex-column align-items-center justify-content-center mt-3">
+    <div class="col-sm-12">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th scope="col" class="text-center">Название сохранения</th>
+                <th scope="col" class="text-center">Действие</th>
+            </tr>
+            </thead>
+            <tr th:each="file : ${restoreFiles}">
+                <form>
+                    <input type="hidden" th:value="${file}" name="filename">
+                    <td scope="col" class="text-center"><span class="h3" th:text="${file}"></span></td>
+                    <td scope="col" class="text-center">
+                        <input type="submit" value="Восстановить"
+                               th:formaction="@{/backup/restore}" formmethod="post"
+                               class="btn btn-outline-success mr-2">
+                        <input type="submit" value="Удалить" class="btn btn-outline-danger"
+                               th:formaction="@{/backup/deleteDump}" formmethod="post">
+                    </td>
+                </form>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+</html>

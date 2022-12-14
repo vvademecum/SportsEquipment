@@ -43,7 +43,7 @@ public class MainController {
                 response.sendRedirect(request.getContextPath() + "/");
                 break;
             case "ROLE_ADMIN":
-                response.sendRedirect(request.getContextPath() + "/");
+                response.sendRedirect(request.getContextPath() + "/backup");
                 break;
             case "ROLE_CASHIER":
                 response.sendRedirect(request.getContextPath() + "/");

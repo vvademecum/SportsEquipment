@@ -18,7 +18,7 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
+            <li class="nav-item active" th:if="${userRole == 'ROLE_USER'}">
                 <a class="nav-link" href="/">Главная <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item" th:if="${userRole == 'ROLE_ADMIN' || userRole == 'ROLE_HR'}">
@@ -37,8 +37,7 @@
                 th:if="${userRole == 'ROLE_ADMIN' || userRole == 'ROLE_USER' || userRole == 'ROLE_CASHIER'}">
                 <a class="nav-link" href="/basket">Заказы</a>
             </li>
-            <li class="nav-item"
-                th:if="${userRole == 'ROLE_ADMIN' || userRole == 'ROLE_USER'}">
+            <li class="nav-item" th:if="${userRole == 'ROLE_USER'}">
                 <a class="nav-link" href="/cart">Корзина</a>
             </li>
         </ul>
@@ -100,9 +99,11 @@
                        name="dec"/>
             </div>
             <div class="form-group col-md-1">
-                <input type="hidden" min="1" th:value="${carts}" th:align="center" name="quantity" value="1" class="form-control mb-2"
+                <input type="hidden" min="1" th:value="${carts}" th:align="center" name="quantity" value="1"
+                       class="form-control mb-2"
                        placeholder="Количество"/>
-                <input type="number" min="1" th:value="${carts}" th:align="center" name="quantity1" value="1" class="form-control mb-2"
+                <input type="number" min="1" th:value="${carts}" th:align="center" name="quantity1" value="1"
+                       class="form-control mb-2"
                        placeholder="Количество" disabled/>
             </div>
             <div class="form-group col-md-1">
@@ -113,8 +114,10 @@
 
         <input type="hidden" name="isMainPage" th:value="${false}">
 
-        <p><input class="btn btn-primary" type="submit" value="Добавить продукт" th:if="${product.quantityInStock} >= 1"></p>
-        <p><input type="submit" class="btn btn-danger" value="Нет в наличии" th:if="${product.quantityInStock} < 1" disabled></p>
+        <p><input class="btn btn-primary" type="submit" value="Добавить продукт"
+                  th:if="${product.quantityInStock} >= 1"></p>
+        <p><input type="submit" class="btn btn-danger" value="Нет в наличии" th:if="${product.quantityInStock} < 1"
+                  disabled></p>
 
         <input type="hidden" th:field="*{characteristics.id}" th:value="${product.characteristics.id}">
         <input type="hidden" th:field="*{id}" th:value="${product.id}">

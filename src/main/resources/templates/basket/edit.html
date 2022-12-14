@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -17,8 +17,11 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
+            <li class="nav-item" th:if="${userRole == 'ROLE_USER'}">
                 <a class="nav-link" href="/">Главная</a>
+            </li>
+            <li class="nav-item" th:if="${userRole == 'ROLE_ADMIN'}">
+                <a class="nav-link" href="/backup">Управление базой</a>
             </li>
             <li class="nav-item" th:if="${userRole == 'ROLE_ADMIN' || userRole == 'ROLE_HR'}">
                 <a class="nav-link" href="/employee">Сотрудники</a>
@@ -34,6 +37,9 @@
             </li>
             <li class="nav-item" th:if="${userRole == 'ROLE_ADMIN' || userRole == 'ROLE_USER' || userRole == 'ROLE_CASHIER'}">
                 <a class="nav-link" href="/basket">Заказы</a>
+            </li>
+            <li class="nav-item" th:if="${userRole == 'ROLE_USER'}">
+                <a class="nav-link" href="/cart">Корзина</a>
             </li>
         </ul>
     </div>
@@ -93,14 +99,18 @@
             <label class="mt-4 font-weight-bold" for="employee">Кассир:</label>
             <select name="employee_id" class="form-control mb-2" id="employee" th:field="*{employee}">
                 <option th:each="employee : ${employees}" th:value="${employee.id}"
-                        th:selected="${employee.id == basket.employee.id}"
-                        th:text="${employee.surname} + ' ' + ${#strings.substring(employee.name, 0, 1)} + '. ' + ${#strings.substring(employee.patronymic, 0, 1)} + '. '"></option>
+                        th:text="${employee.surname} + ' ' + ${#strings.substring(employee.name, 0, 1)} + '. ' + ${#strings.substring(employee.patronymic, 0, 1)} + '. '">
+                </option>
+                <option th:text="Самообслуживание"
+                        th:selected="${basket.employee == null}"
+                        th:value="${null}">
+                </option>
             </select>
             <span class="error text-danger" th:if="${#fields.hasErrors('employee')}" th:errors="*{employee}"></span>
         </div>
 
         <input type="hidden" th:field="*{id}" value="${basket.id}"/>
-        <p><input class="btn btn-primary" type="submit" value="Сохранить"></p>
+        <p><input class="btn btn-primary" type="submit" th:method="get" value="Сохранить"></p>
     </form>
 </content>
 

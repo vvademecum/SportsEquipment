@@ -17,8 +17,11 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
+            <li class="nav-item" th:if="${userRole == 'ROLE_USER'}">
                 <a class="nav-link" href="/">Главная</a>
+            </li>
+            <li class="nav-item" th:if="${userRole == 'ROLE_ADMIN'}">
+                <a class="nav-link" href="/backup">Управление базой</a>
             </li>
             <li class="nav-item"  th:if="${userRole == 'ROLE_ADMIN' || userRole == 'ROLE_HR'}">
                 <a class="nav-link" href="/employee">Сотрудники</a>
@@ -34,6 +37,9 @@
             </li>
             <li class="nav-item" th:if="${userRole == 'ROLE_ADMIN' || userRole == 'ROLE_USER' || userRole == 'ROLE_CASHIER'}">
                 <a class="nav-link" href="/basket">Заказы</a>
+            </li>
+            <li class="nav-item" th:if="${userRole == 'ROLE_USER'}">
+                <a class="nav-link" href="/cart">Корзина</a>
             </li>
         </ul>
     </div>

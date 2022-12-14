@@ -19,7 +19,7 @@ public class ImageController {
     private final ImageRepository imageRepository;
     private final ProductRepository productRepository;
 
-    @GetMapping("/images/{id}")
+    @GetMapping("/image/{id}")
     private ResponseEntity<?> getImageByProductId(@PathVariable Long id) {
         Image image = productRepository.findById(id).get().getImage();
 

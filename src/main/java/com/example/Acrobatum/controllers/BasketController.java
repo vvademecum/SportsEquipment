@@ -73,7 +73,6 @@ public class BasketController {
     @GetMapping("/add")
     public String basketAddPage(@ModelAttribute("basket")
                                 Сheque basket,
-                                BindingResult bindingResult,
                                 Model model) {
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -198,10 +197,11 @@ public class BasketController {
     @GetMapping("/edit")
     public String basketEditPage(@RequestParam long basket_id, Model model) {
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
         Сheque basket = chequeRepository.findById(basket_id).get();
         model.addAttribute("basket", basket);
-
-        model.addAttribute("dateOfPurchase", basket.getDateOfPurchase());
+        model.addAttribute("dateOfPurchase", basket.getDateOfPurchase().split(" ")[0]);
         model.addAttribute("employees", employeeRepository.findAll());
         model.addAttribute("clients", clientRepository.findAll());
         model.addAttribute("products", productRepository.findAll());
@@ -283,13 +283,15 @@ public class BasketController {
     }
 
     @PostMapping("/edit")
-    public String clientEdit(@ModelAttribute("basket")
+    public String basketEdit(@ModelAttribute("basket")
                              @Valid Сheque basket,
-                             BindingResult bindingResult, Model model) {
+                             BindingResult bindingResult,
+                             BindingResult bindingResult1,
+                             Model model) {
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-        if (bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors() || bindingResult1.hasErrors()) {
             model.addAttribute("dateNow", dateFormat.format(new Date()));
             model.addAttribute("basket", new Сheque());
             model.addAttribute("empId", getAuthEmployee() != null ? getAuthEmployee().getId() : 7);
