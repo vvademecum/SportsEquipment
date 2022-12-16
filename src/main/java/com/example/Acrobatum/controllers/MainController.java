@@ -46,13 +46,13 @@ public class MainController {
                 response.sendRedirect(request.getContextPath() + "/backup");
                 break;
             case "ROLE_CASHIER":
-                response.sendRedirect(request.getContextPath() + "/");
+                response.sendRedirect(request.getContextPath() + "/basket");
                 break;
             case "ROLE_HR":
-                response.sendRedirect(request.getContextPath() + "/");
+                response.sendRedirect(request.getContextPath() + "/employee");
                 break;
             case "ROLE_STOREKEEPER":
-                response.sendRedirect(request.getContextPath() + "/");
+                response.sendRedirect(request.getContextPath() + "/product");
                 break;
             default:
                 response.sendRedirect(request.getContextPath() + "/logIn");

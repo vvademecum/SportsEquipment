@@ -142,12 +142,7 @@ public class ProviderController {
             return "provider/edit";
         }
         dbProvider = providerRepository.findById(provider.getId()).get();
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("provider", provider);
-            model.addAttribute("contacts", contacts);
-            return "provider/edit";
-        }
-        if(hasContacts == null ? false : hasContacts && bindingResult2.hasErrors()){
+        if (bindingResult.hasErrors() || hasContacts == null ? false : hasContacts && bindingResult2.hasErrors()) {
             model.addAttribute("provider", provider);
             model.addAttribute("contacts", contacts);
             return "provider/edit";

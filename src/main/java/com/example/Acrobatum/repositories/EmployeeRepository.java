@@ -9,6 +9,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 public interface EmployeeRepository extends CrudRepository<Employee, Long> {
     Employee findByLogin(String login);
+
     List<Employee> findByNameContainsOrSurnameContainsOrPatronymicContains(String name, String surname, String patronymic);
 
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -57,10 +57,16 @@
         <input placeholder="Наименование товара" class="form-control search mr-3" name="sName">
         <input value="Поиск" type="submit" class="btn btn-info">
     </form>
-    <form method="get" th:action="@{/product/add}"
-          class="form-group">
-        <input type="submit" value="Добавить товар" class="btn btn-success">
-    </form>
+    <div class="d-flex flex-row align-items-center justify-content-right mt-3">
+        <form th:if="${userRole == 'ROLE_ADMIN'}" method="get" th:action="@{/product/chart}"
+              class="form-group mr-3">
+            <input type="submit" value="Статистика продаж" class="btn btn-dark">
+        </form>
+        <form method="get" th:action="@{/product/add}"
+              class="form-group">
+            <input type="submit" value="Добавить товар" class="btn btn-success">
+        </form>
+    </div>
 </search>
 
 <div class="d-flex flex-column align-items-center justify-content-center mt-3">
@@ -74,14 +80,6 @@
                 <th scope="col" class="text-center">Стоимость</th>
                 <th scope="col" class="text-center">Поставщик</th>
                 <th scope="col" class="text-center">Действия</th>
-
-                <!--        <th scope="col" class="text-center">Описание</th>-->
-                <!--        <th scope="col" class="text-center">Срок гарантии</th>-->
-                <!--        <th scope="col" class="text-center">Вид спорта</th>-->
-                <!--        <th scope="col" class="text-center">Сезон</th>-->
-                <!--        <th scope="col" class="text-center">Пол</th>-->
-                <!--        <th scope="col" class="text-center">Страна производства</th>-->
-
             </tr>
             </thead>
             <tr th:each="product : ${products}">

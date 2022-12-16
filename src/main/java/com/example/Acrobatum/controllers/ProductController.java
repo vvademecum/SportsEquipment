@@ -15,6 +15,11 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.example.Acrobatum.controllers.CartController.carts;
 
@@ -30,7 +35,7 @@ public class ProductController {
     final SeasonRepository seasonRepository;
     final CountryRepository countryRepository;
     final ImageRepository imageRepository;
-    final Product_ChequeRepository position;
+    final Product_ChequeRepository positionRepository;
 
     public ProductController(ProductService productService, ProductRepository productRepository, ProviderRepository providerRepository, CharacteristicsRepository characteristicsRepository, KindOfSportRepository kindOfSportRepository, GenderRepository genderRepository, SeasonRepository seasonRepository, CountryRepository countryRepository, ImageRepository imageRepository, Product_ChequeRepository product_chequeRepository) {
         this.productService = productService;
@@ -42,7 +47,7 @@ public class ProductController {
         this.seasonRepository = seasonRepository;
         this.countryRepository = countryRepository;
         this.imageRepository = imageRepository;
-        this.position = product_chequeRepository;
+        this.positionRepository = product_chequeRepository;
     }
 
     @GetMapping
@@ -119,6 +124,13 @@ public class ProductController {
             return "product/add";
         }
 
+        Characteristics dbCharacteristics = createCharacteristics(characteristics);
+        createProduct(product, dbCharacteristics, file);
+
+        return "redirect:/product";
+    }
+
+    Characteristics createCharacteristics(Characteristics characteristics) {
         Characteristics dbCharacteristics = new Characteristics(
                 characteristics.getGuaranteePeriod(),
                 characteristics.getKindOfSport(),
@@ -127,8 +139,11 @@ public class ProductController {
                 characteristics.getCountry()
         );
         characteristicsRepository.save(dbCharacteristics);
+        return dbCharacteristics;
+    }
 
-        dbProduct = new Product(product.getName(),
+    void createProduct(Product product, Characteristics dbCharacteristics, MultipartFile file) throws IOException {
+        Product dbProduct = new Product(product.getName(),
                 product.getDescription(),
                 product.getQuantityInStock(),
                 product.getCategory(),
@@ -139,7 +154,6 @@ public class ProductController {
 
         productService.saveProduct(dbProduct, file);
         productRepository.save(dbProduct);
-        return "redirect:/product";
     }
 
     @PostMapping("/delete")
@@ -226,4 +240,29 @@ public class ProductController {
         return "redirect:/product";
     }
 
+    @GetMapping("/chart")
+    public String showChart(Model model) {
+
+        Map<String, Integer> positions = new HashMap<>();
+
+        positionRepository.findAll().forEach(p -> {
+            if (positions.containsKey(p.getProduct().getName()))
+                positions.put(p.getProduct().getName(), positions.get(p.getProduct().getName()) + p.getQuantity());
+            else
+                positions.put(p.getProduct().getName(), p.getQuantity());
+        });
+
+//        for (Map.Entry<String, Integer> entry : positions.entrySet()) {
+//            System.out.println(entry.getKey() + " - " + entry.getValue());
+//        }
+
+        model.addAttribute("products", (positions
+                                                    .entrySet().stream()
+                                                    .map(Map.Entry::getKey)
+                                                    .collect(Collectors.toList())));
+        model.addAttribute("sales", (positions.values()
+                                                .stream()
+                                                .collect(Collectors.toList())));
+        return "product/ordersChart";
+    }
 }

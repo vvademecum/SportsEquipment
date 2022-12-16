@@ -103,7 +103,7 @@ public class EmployeeController {
 
         model.addAttribute("roles", roleRepository.findAll());
         Employee dbEmployee = employeeRepository.findByLogin(employee.getLogin());
-        if ((dbEmployee != null && dbEmployee.getId() != employee.getId())) {
+        if ((dbEmployee != null && !dbEmployee.getId().equals(employee.getId()))) {
             model.addAttribute("message", "Такой логин уже существует");
             return "employee/edit";
         }
