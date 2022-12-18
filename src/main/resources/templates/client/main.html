@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -49,7 +49,6 @@
 </nav>
 <body>
 
-
 <search class="container d-flex flex-column align-items-center mt-3">
     <p><h4 class="display-8 p-3">Клиенты</h4></p>
     <form method="get" th:action="@{/client}"
@@ -59,10 +58,16 @@
         <input placeholder="Отчество" class="form-control search mr-3" name="sPatronymic">
         <input value="Поиск" type="submit" class="btn btn-info">
     </form>
-    <form method="get" th:action="@{/client/add}"
-          class="form-group">
-        <input type="submit" value="Добавить клиента" class="btn btn-success">
-    </form>
+    <div class="d-flex flex-row align-items-center justify-content-right mt-3">
+        <form th:if="${userRole == 'ROLE_ADMIN'}" method="get" th:action="@{/client/report}"
+              class="form-group mr-3">
+            <input type="submit" value="Скачать список XLS" class="btn btn-dark">
+        </form>
+        <form method="get" th:action="@{/client/add}"
+              class="form-group">
+            <input type="submit" value="Добавить клиента" class="btn btn-success">
+        </form>
+    </div>
 </search>
 
 

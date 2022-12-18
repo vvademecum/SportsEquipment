@@ -252,17 +252,13 @@ public class ProductController {
                 positions.put(p.getProduct().getName(), p.getQuantity());
         });
 
-//        for (Map.Entry<String, Integer> entry : positions.entrySet()) {
-//            System.out.println(entry.getKey() + " - " + entry.getValue());
-//        }
-
         model.addAttribute("products", (positions
-                                                    .entrySet().stream()
-                                                    .map(Map.Entry::getKey)
-                                                    .collect(Collectors.toList())));
+                .entrySet().stream()
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList())));
         model.addAttribute("sales", (positions.values()
-                                                .stream()
-                                                .collect(Collectors.toList())));
+                .stream()
+                .collect(Collectors.toList())));
         return "product/ordersChart";
     }
 }

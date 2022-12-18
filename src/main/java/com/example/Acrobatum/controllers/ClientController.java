@@ -4,6 +4,12 @@ import com.example.Acrobatum.models.Client;
 import com.example.Acrobatum.models.Contacts;
 import com.example.Acrobatum.repositories.ClientRepository;
 import com.example.Acrobatum.repositories.ContactsRepository;
+import com.example.Acrobatum.service.ClientExporter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,11 +17,20 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 @Controller
 @RequestMapping("/client")
 public class ClientController {
 
+    @Autowired
+    private ResourceLoader resourceLoader;
+    private RuntimeException runtimeException;
     final ClientRepository clientRepository;
     final ContactsRepository contactsRepository;
 
@@ -74,7 +89,7 @@ public class ClientController {
             model.addAttribute("client", client);
             return "client/add";
         }
-        if(hasContacts == null ? false : hasContacts && bindingResult2.hasErrors()){
+        if (hasContacts == null ? false : hasContacts && bindingResult2.hasErrors()) {
             model.addAttribute("client", client);
             return "client/add";
         }
@@ -137,7 +152,7 @@ public class ClientController {
         if (bindingResult.hasErrors()) {
             return "client/edit";
         }
-        if(hasContacts == null ? false : hasContacts && bindingResult2.hasErrors()){
+        if (hasContacts == null ? false : hasContacts && bindingResult2.hasErrors()) {
             model.addAttribute("client", client);
             return "client/edit";
         }
@@ -164,5 +179,33 @@ public class ClientController {
         clientRepository.save(dbClient);
 
         return "redirect:/client";
+    }
+
+    @GetMapping("/report")
+    public ResponseEntity<Resource> getReport() throws IOException {
+
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = HttpHeaders.CONTENT_DISPOSITION;
+        String headerValue = "attachment; filename=clients_" + currentDateTime + ".xlsx";
+
+        List<Client> listClients = (List<Client>) clientRepository.findAll();
+
+        ClientExporter excelExporter = new ClientExporter(listClients);
+
+        excelExporter.export(currentDateTime);
+
+        try {
+            String uri = Paths.get("load/clients_" + currentDateTime + ".xlsx").toUri().toString();
+            org.springframework.core.io.Resource resource = resourceLoader.getResource(uri);
+            ResponseEntity<org.springframework.core.io.Resource> body = ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, headerValue)
+                    .contentLength(resource.contentLength())
+                    .body(resource);
+            return body;
+        } catch (IOException e) {
+            throw runtimeException;
+        }
     }
 }
