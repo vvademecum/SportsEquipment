@@ -68,7 +68,7 @@
             <thead>
             <tr>
                 <th scope="col" class="text-center">Дата заказа</th>
-                <th scope="col" class="text-center">ФИО клиента</th>
+                <th scope="col" class="text-center" th:if="${userRole == 'ROLE_ADMIN' || userRole == 'ROLE_CASHIER'}">ФИО клиента</th>
                 <th scope="col" class="text-center">ФИО кассира</th>
                 <th scope="col" class="text-center">Товары</th>
                 <th scope="col" class="text-center" th:if="${userRole == 'ROLE_ADMIN' || userRole == 'ROLE_CASHIER'}">Действия</th>
@@ -78,7 +78,7 @@
                 <form>
                     <td scope="col" class="text-center"><span class="lead fs-7 d-inline"
                                                               th:text="${basket.dateOfPurchase}"></span></td>
-                    <td scope="col" class="text-center"><span class="lead fs-7 d-inline"
+                    <td scope="col" class="text-center" th:if="${userRole == 'ROLE_ADMIN' || userRole == 'ROLE_CASHIER'}"><span class="lead fs-7 d-inline"
                                                               th:text="${basket.client.surname} + ' ' + ${#strings.substring(basket.client.name, 0, 1)} + '. ' + ${#strings.substring(basket.client.patronymic, 0, 1)} + '. '"></span></td>
                     <td scope="col" class="text-center"><span class="lead fs-7 d-inline"
                                                               th:text="${basket.employee != null} ? ${basket.employee.surname} + ' ' + ${#strings.substring(basket.employee.name, 0, 1)} + '. ' + ${#strings.substring(basket.employee.patronymic, 0, 1)} + '. ' : 'Самообслуживание'"></span></td>
